@@ -1,0 +1,526 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  background: #f5f7fb;
+}
+
+.homePage {
+  padding: 40px;
+}
+
+.heroSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 60px;
+}
+
+.heroSection h1 {
+  font-size: 52px;
+  margin-bottom: 12px;
+}
+
+.heroSection p {
+  font-size: 18px;
+  color: #666;
+}
+.authContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.jobsSection h2 {
+  margin-bottom: 24px;
+}
+
+.jobsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.listingGrid {
+  max-height: 360px;
+}
+
+.dashboardPage {
+  padding: 40px;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.dashboardHeader h1 {
+  font-size: 44px;
+  margin-bottom: 10px;
+}
+
+.dashboardHeader p {
+  color: #666;
+}
+
+.eyebrow {
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.dashboardHeader button,
+.dashboardCard button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.dashboardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.appliedJobsButton {
+  min-width: 58px;
+  gap: 8px;
+}
+
+.appliedJobsButton span {
+  align-items: center;
+  background: white;
+  border-radius: 50%;
+  color: #111827;
+  display: inline-flex;
+  font-size: 13px;
+  height: 20px;
+  justify-content: center;
+  width: 20px;
+}
+
+.dashboardCard button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.dashboardCard {
+  background: white;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.dashboardCard h2,
+.dashboardSection h2 {
+  margin-bottom: 20px;
+}
+
+.dashboardCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dashboardCard input,
+.dashboardCard select,
+.dashboardCard textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+}
+
+.dashboardCard textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.dashboardSection {
+  margin-top: 36px;
+}
+
+.appliedJobsPanel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  margin-left: auto;
+  max-width: 420px;
+  padding: 18px;
+}
+
+.appliedJobsHeader {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.appliedJobsHeader button {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+}
+
+.appliedJobsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.appliedJobItem {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  text-align: left;
+}
+
+.appliedJobItem span {
+  color: #111827;
+  font-weight: 700;
+}
+
+.appliedJobItem small {
+  color: #6b7280;
+}
+
+.appliedJobItem strong,
+.appliedBadge {
+  color: #047857;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.applicationsQueue {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.applicationCard {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.applicationTopline {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.applicationTopline h3 {
+  color: #111827;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.applicationTopline p,
+.applicationTopline small {
+  color: #6b7280;
+}
+
+.statusBadge {
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 10px;
+}
+
+.status-pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.status-reviewed {
+  background: #eef6ff;
+  color: #1d4ed8;
+}
+
+.status-interview {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.status-rejected {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-hired {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.resumeLink {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.applicationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.applicationActions button {
+  background: #111827;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+.applicationActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.terminalStatus {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.candidateLayout {
+  align-items: start;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+}
+
+.candidateJobList,
+.candidateJobDetails {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.candidateJobList {
+  overflow: hidden;
+}
+
+.candidateListHeader {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 18px;
+}
+
+.candidateListHeader h2 {
+  margin-bottom: 6px;
+}
+
+.candidateListHeader p {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.candidateListScroller {
+  display: flex;
+  flex-direction: column;
+  max-height: 680px;
+  overflow-y: auto;
+}
+
+.candidateJobItem {
+  background: white;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  text-align: left;
+}
+
+.candidateJobItem.active {
+  background: #f3f8ff;
+  box-shadow: inset 4px 0 0 #2563eb;
+}
+
+.candidateJobItem h3 {
+  color: #111827;
+  font-size: 18px;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.candidateJobItem p {
+  color: #6b7280;
+}
+
+.candidateJobDetails {
+  min-height: 680px;
+  padding: 26px;
+  position: sticky;
+  top: 24px;
+}
+
+.detailsHeader {
+  align-items: flex-start;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.detailsHeader h2 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.detailsHeader p {
+  color: #4b5563;
+  font-weight: 700;
+}
+
+.detailsHeader strong {
+  background: #ecfdf5;
+  border-radius: 999px;
+  color: #047857;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.detailsMeta {
+  margin-bottom: 28px;
+}
+
+.detailsBlock {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+
+.detailsBlock h3,
+.applyForm h3 {
+  margin-bottom: 12px;
+}
+
+.detailsBlock p {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.applyForm {
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+  padding-top: 24px;
+}
+
+.applyForm input,
+.applyForm textarea {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.applyForm textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.applyForm button {
+  align-self: flex-start;
+  background: black;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  padding: 12px 20px;
+}
+
+.applyForm button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.successText {
+  color: #047857;
+  margin-bottom: 16px;
+}
+
+.errorText {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 760px) {
+  .homePage,
+  .dashboardPage {
+    padding: 24px;
+  }
+
+  .heroSection,
+  .dashboardHeader,
+  .authContainer {
+    flex-direction: column;
+  }
+
+  .dashboardActions {
+    width: 100%;
+  }
+
+  .candidateLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .candidateJobDetails {
+    min-height: auto;
+    position: static;
+  }
+
+  .heroSection h1,
+  .dashboardHeader h1 {
+    font-size: 36px;
+  }
+}

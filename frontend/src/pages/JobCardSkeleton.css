@@ -1,0 +1,56 @@
+.jobSkeleton {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeletonTitle,
+.skeletonCompany,
+.skeletonLocation,
+.skeletonTags span {
+  background: #e5e7eb;
+  border-radius: 6px;
+  animation: pulse 1.4s infinite;
+}
+
+.skeletonTitle {
+  height: 20px;
+  width: 70%;
+}
+
+.skeletonCompany {
+  height: 14px;
+  width: 45%;
+}
+
+.skeletonLocation {
+  height: 14px;
+  width: 30%;
+}
+
+.skeletonTags {
+  display: flex;
+  gap: 8px;
+}
+
+.skeletonTags span {
+  height: 28px;
+  width: 80px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.55;
+  }
+}

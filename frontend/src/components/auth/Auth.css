@@ -1,0 +1,38 @@
+.authCard {
+  width: 350px;
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.authCard h2 {
+  margin-bottom: 20px;
+}
+
+.authCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.authCard input,
+.authCard select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.authCard button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.errorText {
+  color: red;
+  font-size: 14px;
+}

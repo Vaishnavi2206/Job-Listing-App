@@ -1,0 +1,181 @@
+const Application = require("./application.model");
+
+const JobListing = require("../jobListings/jobListing.model");
+
+const Company = require("../companies/company.model");
+const User = require("../users/user.model");
+
+const {
+  APPLICATION_STATUS,
+  VALID_STATUS_TRANSITIONS,
+} = require("../../shared/constants/applicationStatus");
+
+const createApplication = async (payload, userId) => {
+  const job = await JobListing.findByPk(payload.jobListingId);
+
+  if (!job) {
+    throw new Error("Job not found");
+  }
+
+  /*
+    Prevent duplicate applications
+  */
+
+  const existingApplication = await Application.findOne({
+    where: {
+      candidateId: userId,
+      jobListingId: payload.jobListingId,
+    },
+  });
+
+  if (existingApplication) {
+    throw new Error("You already applied for this job");
+  }
+
+  const application = await Application.create({
+    candidateId: userId,
+
+    companyId: job.companyId,
+
+    jobListingId: payload.jobListingId,
+
+    resumeUrl: payload.resumeUrl,
+
+    coverLetter: payload.coverLetter,
+
+    status: APPLICATION_STATUS.PENDING,
+  });
+
+  return application;
+};
+
+const getMyApplications = async (userId) => {
+  return await Application.findAll({
+    where: {
+      candidateId: userId,
+    },
+
+    include: [
+      {
+        model: JobListing,
+      },
+
+      {
+        model: Company,
+      },
+    ],
+  });
+};
+
+const getCompanyApplications = async (companyId, userId) => {
+  const company = await Company.findByPk(companyId);
+
+  if (!company) {
+    throw new Error("Company not found");
+  }
+
+  if (company.createdBy !== userId) {
+    throw new Error("You are not allowed to view these applications");
+  }
+
+  return await Application.findAll({
+    where: {
+      companyId,
+    },
+
+    include: [
+      {
+        model: JobListing,
+      },
+
+      {
+        model: User,
+        attributes: [
+          "id",
+          "firstName",
+          "lastName",
+          "username",
+        ],
+      },
+    ],
+  });
+};
+
+const getJobApplications = async (jobId, userId) => {
+  const job = await JobListing.findByPk(jobId, {
+    include: [
+      {
+        model: Company,
+      },
+    ],
+  });
+
+  if (!job) {
+    throw new Error("Job not found");
+  }
+
+  if (job.Company.createdBy !== userId) {
+    throw new Error("You are not allowed to view these applications");
+  }
+
+  return await Application.findAll({
+    where: {
+      jobListingId: jobId,
+    },
+
+    include: [
+      {
+        model: User,
+        attributes: [
+          "id",
+          "firstName",
+          "lastName",
+          "username",
+        ],
+      },
+    ],
+  });
+};
+
+const updateApplicationStatus = async (applicationId, status, userId) => {
+  const application = await Application.findByPk(applicationId, {
+    include: [
+      {
+        model: Company,
+      },
+    ],
+  });
+
+  if (!application) {
+    throw new Error("Application not found");
+  }
+
+  if (application.Company.createdBy !== userId) {
+    throw new Error("You are not allowed to update this application");
+  }
+
+  const currentStatus = application.status.toLowerCase();
+  const nextStatus = status.toLowerCase();
+  const allowedTransitions =
+    VALID_STATUS_TRANSITIONS[currentStatus] || [];
+
+  if (!allowedTransitions.includes(nextStatus)) {
+    throw new Error(
+      `Invalid status transition from ${currentStatus} to ${nextStatus}`,
+    );
+  }
+
+  await application.update({
+    status: nextStatus,
+  });
+
+  return application;
+};
+
+module.exports = {
+  createApplication,
+  getMyApplications,
+  getCompanyApplications,
+  getJobApplications,
+  updateApplicationStatus,
+};

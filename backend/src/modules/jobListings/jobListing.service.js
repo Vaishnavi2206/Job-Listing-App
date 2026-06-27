@@ -51,46 +51,6 @@ let order = [["createdAt", "DESC"]];
     limit: parseInt(pageSize, 10),
     offset: pageNo,
   };
-  // if (search?.trim()) {
-  //   query.where = {
-  //     ...query.where,
-
-  //     [Op.and]: [
-  //       where(
-  //         literal(`
-  //           to_tsvector(
-  //             'english',
-  //             coalesce("JobListing"."title",'') || ' ' ||
-  //             coalesce("JobListing"."description",'') || ' ' ||
-  //             coalesce("JobListing"."location",'')
-  //           )
-  //         `),
-  //         "@@",
-  //         literal(
-  //           `plainto_tsquery('english', '${search.replace(/'/g, "''")}')`
-  //         )
-  //       ),
-  //     ],
-  //   };
-
-  //   query.order = [
-  //     [
-  //       literal(`
-  //         ts_rank(
-  //           to_tsvector(
-  //             'english',
-  //             coalesce("JobListing"."title",'') || ' ' ||
-  //             coalesce("JobListing"."description",'') || ' ' ||
-  //             coalesce("JobListing"."location",'')
-  //           ),
-  //           plainto_tsquery('english', '${search.replace(/'/g, "''")}')
-  //         )
-  //       `),
-  //       "DESC",
-  //     ],
-  //   ];
-  // }
-// console.time("db");
   
   if (search?.trim()) {
     where[Op.and] = [
@@ -119,13 +79,14 @@ let order = [["createdAt", "DESC"]];
       ],
     ];
   }
-  return JobListing.findAll({
-    ...query,
+  // return JobListing.findAll({
+  //   ...query,
 
-    });
-    // const jobs = await JobListing.findAll(query);
+  //   });
+const start = Date.now();
+    const jobs = await JobListing.findAll(query);
 
-  // console.timeEnd("db");
+  console.log(`DB took ${Date.now() - start} ms`);
   return jobs;
     };
 

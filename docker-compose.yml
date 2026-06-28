@@ -48,37 +48,20 @@ services:
     networks:
       - job-network
 
-  frontend:
-    build:
-      context: ./frontend
-
-    container_name: job-frontend
-
-    restart: unless-stopped
-
-    depends_on:
-      - backend
-
-    ports:
-      - "5173:80"
-
-    networks:
-      - job-network
-
   nginx:
     build:
-      context: ./infrastructure/nginx
+      context: .
+      dockerfile: infrastructure/nginx/Dockerfile
 
     container_name: job-nginx
 
     restart: unless-stopped
 
     depends_on:
-      - frontend
       - backend
 
     ports:
-      - "8081:80"
+      - "80:80"
 
     networks:
       - job-network

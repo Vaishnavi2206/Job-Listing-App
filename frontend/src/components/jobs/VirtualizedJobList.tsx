@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import JobCard from "./JobCard";
@@ -16,7 +16,7 @@ const VirtualizedJobList = ({
   loadMore,
 }) => {
   const parentRef = useRef(null);
-  const loadTriggeredRef = useRef(-1);
+  const loadTriggeredRef = useRef(false);
 
   const rowVirtualizer = useVirtualizer({
     count: jobs.length,
@@ -26,7 +26,7 @@ const VirtualizedJobList = ({
   });
 
   const virtualItems = rowVirtualizer.getVirtualItems();
-  const lastItem = virtualItems[virtualItems.length - 1];
+  // const lastItem = virtualItems[virtualItems.length - 1];
 
 //   useEffect(() => {
 //     if (!lastItem) return;

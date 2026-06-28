@@ -1,5 +1,3 @@
-import React from "react";
-
 const EmployerDashboard = ({
   companyForm,
   myCompanies,
@@ -12,6 +10,7 @@ const EmployerDashboard = ({
   validApplicationTransitions,
   formatStatus,
   updatingApplicationId,
+  handleUpdateApplicationStatus
 }) => {
   console.log("formatSalary", formatSalary);
   return (

@@ -27,8 +27,6 @@ import type {
 } from "../types";
 
 import "../App.css";
-import { JobCardSkeletonList } from "../components/skeletons/JobCardSkeletonList";
-import { JobDetailsSkeleton } from "../components/skeletons/JobDetailsSkeleton";
 import EmployerDashboard from "../components/dashboard/EmployerDashboard";
 import CandidateDashboard from "../components/dashboard/CandidateDashboard";
 
@@ -151,7 +149,7 @@ const Dashboard = () => {
   try {
     setLoadingMore(true);
     console.log("nextCursor", nextCursor)
-    const response = await getJobs(
+    const response:any = await getJobs(
       10,
       nextCursor
     );
@@ -175,7 +173,7 @@ const Dashboard = () => {
       setError("");
 
       console.log("nextCursor", nextCursor)
-      const [companiesData, jobsData] =
+      const [companiesData, jobsData]: [any, any] =
         await Promise.all([getCompanies(), getJobs(10, nextCursor)]);
 
       const employerCompanies = companiesData.filter(
@@ -242,8 +240,7 @@ const Dashboard = () => {
     setIsSearching(true);
     const timeoutId = setTimeout(async () => {
     try {
-      const jobsData = await getJobs(10,nextCursor,searchTerm);
-      console.log("jobsData", jobsData)
+      const jobsData:any = await getJobs(10,nextCursor,searchTerm);
       setIsSearching(false);
       // setJobs(jobsData);
 
@@ -472,6 +469,7 @@ const Dashboard = () => {
           validApplicationTransitions={validApplicationTransitions}
           formatStatus={formatStatus}
           updatingApplicationId={updatingApplicationId}
+          handleUpdateApplicationStatus={handleUpdateApplicationStatus}
         />
       ) : (
         <CandidateDashboard

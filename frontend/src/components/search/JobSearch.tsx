@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import "./JobSearch.css"
 
 const JobSearch = () => {
-const [jobs, setJobs] = useState([]);
+const [jobs] = useState([]);
   return (
     <div className="searchPage">
   <div className="searchHeader">
@@ -84,7 +84,7 @@ const [jobs, setJobs] = useState([]);
       </div>
 
       <div className="resultsList">
-        {jobs.map(job => (
+        {jobs.map((job:any) => (
           <div key={job.id} className="jobResultCard">
             <h3>{job.title}</h3>
 

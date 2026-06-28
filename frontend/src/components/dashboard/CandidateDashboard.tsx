@@ -1,6 +1,4 @@
-import React from "react";
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
-import JobCard from "../jobs/JobCard";
 import VirtualizedJobList from "../jobs/VirtualizedJobList";
 
 const CandidateDashboard = ({

@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import Auth from "../components/auth/Auth";
-
-import JobCard from "../components/jobs/JobCard";
-
-import { getJobs } from "../services/jobs.service";
+// import { getJobs } from "../services/jobs.service";
 
 import "../App.css";
-import type { Job } from "../types";
 
 const Home = () => {
-    const [jobs, setJobs] = useState<Job[]>([]);
+    // const [jobs, setJobs] = useState<Job[]>([]);
     
     const [loading, setLoading] = useState(true);
     
@@ -17,9 +13,9 @@ const Home = () => {
         const fetchJobs = async () => {
             try {
                 
-             const   data = await  getJobs();
+            //  const   data = await  getJobs();
 
-        setJobs(data);
+        // setJobs(data);
       } catch (error) {
         console.log(error);
       } finally {

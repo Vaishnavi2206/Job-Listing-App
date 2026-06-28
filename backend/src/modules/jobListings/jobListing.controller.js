@@ -31,17 +31,17 @@ const createJob = asyncHandler(
 
 const getAllJobs = asyncHandler(
   async (req, res) => {
-    const {pageSize, pageNo,search} = req.query;
-    const jobs =
+    const {limit, cursor, search} = req.query;
+    const jobsResponse =
       await jobService.getAllJobs({
-        pageSize,
-        pageNo,
+        limit,
+        cursor,
         search
       });
 
     res.json({
       success: true,
-      data: jobs,
+      data: jobsResponse,
     });
   }
 );

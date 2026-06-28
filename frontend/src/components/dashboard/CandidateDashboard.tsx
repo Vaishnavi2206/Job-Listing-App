@@ -1,5 +1,7 @@
 import React from "react";
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
+import JobCard from "../jobs/JobCard";
+import VirtualizedJobList from "../jobs/VirtualizedJobList";
 
 const CandidateDashboard = ({
   jobs,
@@ -13,6 +15,9 @@ const CandidateDashboard = ({
   handleApply,
   formatSalary,
   applying,
+  loadingMore,
+  hasMore,
+  loadMore,
 }) => {
   return (
     <div>
@@ -31,7 +36,7 @@ const CandidateDashboard = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-
+{/* 
           <div className="candidateListScroller">
             {isSearching ? (
               <JobDetailsSkeleton />
@@ -41,44 +46,29 @@ const CandidateDashboard = ({
                 const isApplied = appliedJobIds.has(job.id);
 
                 return (
-                  <button
-                    className={`candidateJobItem ${isSelected ? "active" : ""}`}
-                    key={job.id}
-                    onClick={() => setSelectedJob(job)}
-                  >
-                    <div>
-                      <h3>{job.title}</h3>
-                      <p>{job.Company?.name || "Company"}</p>
-                    </div>
-
-                    <p className="cardDescription" title={job.description}>
-                      {job.description}
-                    </p>
-
-                    <div className="jobMeta">
-                      {job.location && (
-                        <span className="metaPill metaLocation">
-                          {job.location}
-                        </span>
-                      )}
-                      <span className="metaPill metaSalary">
-                        {formatSalary(job)}
-                      </span>
-                      {job.employmentType && (
-                        <span className="metaPill metaType">
-                          {job.employmentType}
-                        </span>
-                      )}
-                    </div>
-
-                    {isApplied && (
-                      <strong className="appliedBadge">Applied</strong>
-                    )}
-                  </button>
+                  <JobCard
+                    job={job}
+                    isSelected={isSelected}
+                    isApplied={isApplied}
+                    setSelectedJob={setSelectedJob}
+                    formatSalary={formatSalary}
+                  />
                 );
               })
             )}
-          </div>
+          </div> */}
+
+          <VirtualizedJobList
+            jobs={jobs}
+            selectedJob={selectedJob}
+            setSelectedJob={setSelectedJob}
+            appliedJobIds={appliedJobIds}
+            formatSalary={formatSalary}
+            isSearching={isSearching}
+            loadingMore= {loadingMore}
+            hasMore={hasMore}
+            loadMore={loadMore}
+          />
         </aside>
 
         <article className="candidateJobDetails">

@@ -1,15 +1,14 @@
 import api from "../api/axios";
 import type { Job, JobPayload } from "../types";
 
-export const getJobs = async (pageSize = 10, pageNo = 1,search?:string): Promise<Job[]> => {
+export const getJobs = async (limit = 10, cursor?: string, search?: string): Promise<Job[]> => {
+  console.log("api call", cursor);
   const response = await api.get("/jobs", {
-    params: search
-      ? {
-        pageSize,
-        pageNo,
-          search
+    params: {
+        limit,
+        cursor,
+        search
         }
-      : undefined,
   });
 
   return response.data.data;

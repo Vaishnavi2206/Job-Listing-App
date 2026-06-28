@@ -105,6 +105,10 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+
 
   const companyForm = useForm<CompanyPayload>();
   const jobForm = useForm<JobFormData>();
@@ -139,13 +143,40 @@ const Dashboard = () => {
     [applications],
   );
 
+  const loadMoreJobs = async () => {
+  if (loadingMore || !hasMore || !nextCursor) {
+    return;
+  }
+
+  try {
+    setLoadingMore(true);
+    console.log("nextCursor", nextCursor)
+    const response = await getJobs(
+      10,
+      nextCursor
+    );
+
+    console.log("response.pagination.nextCursor",response.pagination.nextCursor)
+
+    console.log("response", response)
+
+    setJobs((prev) => [...prev, ...response.jobs]);
+
+    setNextCursor(response.pagination.nextCursor);
+    setHasMore(response.pagination.hasMore);
+  } finally {
+    setLoadingMore(false);
+  }
+};
+
   const loadDashboard = async () => {
     try {
       setLoading(true);
       setError("");
 
+      console.log("nextCursor", nextCursor)
       const [companiesData, jobsData] =
-        await Promise.all([getCompanies(), getJobs()]);
+        await Promise.all([getCompanies(), getJobs(10, nextCursor)]);
 
       const employerCompanies = companiesData.filter(
         (company) => company.createdBy === user?.id
@@ -162,10 +193,12 @@ const Dashboard = () => {
         : await getMyApplications();
 
       setCompanies(companiesData);
-      setJobs(jobsData);
+      setJobs(jobsData.jobs);
+      setNextCursor(jobsData.pagination.nextCursor);
+      setHasMore(jobsData.pagination.hasMore);
       setApplications(applicationsData);
       setSelectedJob(
-        (currentJob) => currentJob || jobsData[0] || null
+        (currentJob) => currentJob || jobsData.jobs[0] || null
       );
     } catch (requestError) {
       setError(
@@ -209,12 +242,17 @@ const Dashboard = () => {
     setIsSearching(true);
     const timeoutId = setTimeout(async () => {
     try {
-      const jobsData = await getJobs(10,0,searchTerm);
+      const jobsData = await getJobs(10,nextCursor,searchTerm);
+      console.log("jobsData", jobsData)
       setIsSearching(false);
-      setJobs(jobsData);
+      // setJobs(jobsData);
 
-        if (jobsData.length > 0) {
-          setSelectedJob(jobsData[0]);
+        setJobs((prev) => [...prev, ...jobsData.jobs]);
+        setNextCursor(jobsData.pagination.nextCursor);
+        setHasMore(jobsData.pagination.hasMore);
+
+        if (jobsData.jobs.length > 0) {
+          setSelectedJob(jobsData.jobs[0]);
         } else {
           setSelectedJob(null);
         }
@@ -448,6 +486,9 @@ const Dashboard = () => {
           handleApply={handleApply}
           formatSalary={formatSalary}
           applying={applying}
+          loadingMore={loadingMore}
+          hasMore={hasMore}
+          loadMore={loadMoreJobs}
         />
       )}
     </div>

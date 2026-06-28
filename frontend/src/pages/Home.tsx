@@ -59,12 +59,12 @@ const Home = () => {
           <p>Loading jobs...</p>
         ) : (
           <div className="jobsGrid">
-            {jobs.map((job) => (
+            {/* {jobs.map((job) => (
               <JobCard
                 key={job.id}
                 job={job}
               />
-            ))}
+            ))} */}
           </div>
         )}
       </section>

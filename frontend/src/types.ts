@@ -26,6 +26,7 @@ export type Job = {
   employmentType?: string;
   companyId: string;
   Company?: Company;
+  applied?: boolean;
 };
 
 export type SignupPayload = {

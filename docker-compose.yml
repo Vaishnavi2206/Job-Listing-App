@@ -66,9 +66,27 @@ services:
     networks:
       - job-network
 
+    volumes:
+      # Stores Let's Encrypt certificates
+      - letsencrypt:/etc/letsencrypt
+
+      # Used for ACME challenge
+      - certbot-www:/var/www/certbot
+  certbot:
+    image: certbot/certbot
+
+    container_name: job-certbot
+
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
 networks:
   job-network:
     driver: bridge
 
 volumes:
   postgres_data:
+
+  letsencrypt:
+
+  certbot-www:

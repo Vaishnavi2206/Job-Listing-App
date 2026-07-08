@@ -5,7 +5,7 @@ const signupSchema = z.object({
 
   lastName: z.string().min(2),
 
-  username: z.string().min(4),
+  username: z.string().email({ message: "Please provide a valid email address." }),
 
   password: z.string().min(6),
 
@@ -13,7 +13,7 @@ const signupSchema = z.object({
 });
 
 const loginSchema = z.object({
-  username: z.string(),
+  username: z.string().email({ message: "Please provide a valid email address." }),
 
   password: z.string(),
 });

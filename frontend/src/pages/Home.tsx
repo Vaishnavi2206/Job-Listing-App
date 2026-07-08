@@ -48,22 +48,22 @@ const Home = () => {
         </div>
       </div>
 
-            <section className="jobsSection">
+        {/* <section className="jobsSection">
         <h2>Latest Jobs</h2>
 
         {loading ? (
           <p>Loading jobs...</p>
         ) : (
           <div className="jobsGrid">
-            {/* {jobs.map((job) => (
+            {jobs.map((job) => (
               <JobCard
                 key={job.id}
                 job={job}
               />
-            ))} */}
+            ))}
           </div>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };

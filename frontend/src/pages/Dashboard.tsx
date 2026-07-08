@@ -29,6 +29,7 @@ import type {
 import "../App.css";
 import EmployerDashboard from "../components/dashboard/EmployerDashboard";
 import CandidateDashboard from "../components/dashboard/CandidateDashboard";
+import AppliedJobsModal from "./AppliedJobsModal";
 
 type JobFormData = Omit<
   JobPayload,
@@ -361,10 +362,8 @@ const Dashboard = () => {
     <div className="dashboardPage">
       <header className="dashboardHeader">
         <div>
-          <p className="eyebrow">Dashboard</p>
-          <h1>
-            Welcome, {user?.firstName || "there"}
-          </h1>
+          <p className="eyebrow">JOB HUNT</p>
+          <h1>Welcome, {user?.firstName || "there"}</h1>
           <p>
             {isEmployer
               ? "Create companies and publish jobs from one workspace."
@@ -376,11 +375,7 @@ const Dashboard = () => {
           {!isEmployer && (
             <button
               className="appliedJobsButton"
-              onClick={() =>
-                setShowAppliedJobs(
-                  (isVisible) => !isVisible
-                )
-              }
+              onClick={() => setShowAppliedJobs((isVisible) => !isVisible)}
               aria-label="Show applied jobs"
             >
               <span aria-hidden="true">A</span>
@@ -392,72 +387,24 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {message && (
-        <p className="successText">{message}</p>
-      )}
+      {message && <p className="successText">{message}</p>}
 
       {error && <p className="errorText">{error}</p>}
-
-      {showAppliedJobs && !isEmployer && (
-        <section className="appliedJobsPanel">
-          <div className="appliedJobsHeader">
-            <h2>Applied Jobs</h2>
-            <button
-              onClick={() => setShowAppliedJobs(false)}
-              aria-label="Close applied jobs"
-            >
-              x
-            </button>
-          </div>
-
-          {applications.length ? (
-            <div className="appliedJobsList">
-              {applications.map((application) => {
-                const job =
-                  getApplicationJob(application);
-
-                return (
-                  <button
-                    className="appliedJobItem"
-                    key={application.id}
-                    onClick={() => {
-                      const listedJob = jobs.find(
-                        (availableJob) =>
-                          availableJob.id ===
-                          application.jobListingId
-                      );
-
-                      if (listedJob || job) {
-                        setSelectedJob(
-                          listedJob || job || null
-                        );
-                      }
-                      setShowAppliedJobs(false);
-                    }}
-                  >
-                    <span>{job?.title || "Job"}</span>
-                    <small>
-                      {application.Company?.name ||
-                        job?.Company?.name ||
-                        "Company"}
-                    </small>
-                    <strong>
-                      {application.status}
-                    </strong>
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <p>No applications yet.</p>
-          )}
-        </section>
-      )}
-
+      {showAppliedJobs && !isEmployer &&
+        (applications.length ? (
+          <AppliedJobsModal
+            applications={applications}
+            getApplicationJob={getApplicationJob}
+            setSelectedJob={setSelectedJob}
+            setShowAppliedJobs={setShowAppliedJobs}
+          />
+        ) : (
+          <p>No applications yet.</p>
+        ))}
       {loading ? (
         <p>Loading dashboard...</p>
       ) : isEmployer ? (
-         <EmployerDashboard
+        <EmployerDashboard
           companyForm={companyForm}
           jobForm={jobForm}
           myCompanies={myCompanies}

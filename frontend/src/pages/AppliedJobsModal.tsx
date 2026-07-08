@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
+// const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -12,17 +10,14 @@ export interface SimpleDialogProps {
   onClose: (value: string) => void;
 }
 
-export default function AppliedJobsModal({applications,getApplicationJob,setSelectedJob, setShowAppliedJobs}: any) {
+export default function AppliedJobsModal({applications,getApplicationJob,setSelectedJob, setShowAppliedJobs, jobs}: any) {
 //   const { onClose, selectedValue, open } = props;
 const [open, setOpen] = React.useState(true);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = (value: string) => {
+    console.log("value", value)
     setOpen(false);
-    setSelectedValue(value);
+    // setSelectedValue(value);
   };
 
 //   const handleListItemClick = (value: string) => {

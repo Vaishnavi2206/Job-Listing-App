@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Auth from "../components/auth/Auth";
 // import { getJobs } from "../services/jobs.service";
 
@@ -7,24 +6,24 @@ import "../App.css";
 const Home = () => {
     // const [jobs, setJobs] = useState<Job[]>([]);
     
-    const [loading, setLoading] = useState(true);
+  //   const [loading, setLoading] = useState(true);
     
-    useEffect(() => {
-        const fetchJobs = async () => {
-            try {
+  //   useEffect(() => {
+  //       const fetchJobs = async () => {
+  //           try {
                 
-            //  const   data = await  getJobs();
+  //           //  const   data = await  getJobs();
 
-        // setJobs(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       // setJobs(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchJobs();
-  }, []);
+  //   fetchJobs();
+  // }, []);
 
 
     return (

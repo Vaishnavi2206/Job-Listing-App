@@ -397,6 +397,7 @@ const Dashboard = () => {
             getApplicationJob={getApplicationJob}
             setSelectedJob={setSelectedJob}
             setShowAppliedJobs={setShowAppliedJobs}
+            jobs={jobs}
           />
         ) : (
           <p>No applications yet.</p>

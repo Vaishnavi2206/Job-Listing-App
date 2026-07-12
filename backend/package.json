@@ -9,19 +9,26 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "start:worker": "node src/worker-process.js",
+    "dev:worker": "nodemon src/worker-process.js",
+    "dashboard": "node src/dashboard/bull-board.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:roles": "node database/seeders/role.seed.js"
   },
   "dependencies": {
+    "@bull-board/api": "^8.1.2",
+    "@bull-board/express": "^8.1.2",
     "bcrypt": "^6.0.0",
-    "bullmq": "^5.77.4",
+    "bullmq": "^5.80.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^9.0.3",
     "pg": "^8.21.0",
     "pg-hstore": "^2.3.4",
+    "redis": "^6.1.0",
     "sequelize": "^6.37.8",
     "zod": "^4.4.3"
   },

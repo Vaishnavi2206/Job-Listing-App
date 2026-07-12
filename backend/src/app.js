@@ -1,6 +1,9 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
+// Must be required before any route/service so all Sequelize associations are registered
+require("./models");
+
 const authRoutes = require("./modules/auth/auth.route.js");
 const errorMiddleware = require("./middleware/error.middleware");
 const companyRoutes = require("./modules/companies/company.route");

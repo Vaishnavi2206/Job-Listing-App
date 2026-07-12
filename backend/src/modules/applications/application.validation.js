@@ -18,6 +18,7 @@ const createApplicationSchema =
 const updateStatusSchema = z.object({
   status: z.enum([
     APPLICATION_STATUS.REVIEWED,
+    APPLICATION_STATUS.ACCEPTED,
     APPLICATION_STATUS.INTERVIEW,
     APPLICATION_STATUS.REJECTED,
     APPLICATION_STATUS.HIRED,

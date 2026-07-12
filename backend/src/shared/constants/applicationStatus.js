@@ -1,14 +1,14 @@
 const APPLICATION_STATUS = {
   PENDING: "pending",
-  REVIEWED: "reviewed",
+  ACCEPTED: "accepted",
   INTERVIEW: "interview",
   REJECTED: "rejected",
   HIRED: "hired",
 };
 
 const VALID_STATUS_TRANSITIONS = {
-  pending: ["reviewed", "rejected"],
-  reviewed: ["interview", "rejected"],
+  pending: ["accepted", "rejected"],
+  accepted: ["interview", "rejected"],
   interview: ["hired", "rejected"],
   rejected: [],
   hired: [],

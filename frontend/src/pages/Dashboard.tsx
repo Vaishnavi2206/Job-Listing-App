@@ -72,8 +72,8 @@ const validApplicationTransitions: Record<
   string,
   string[]
 > = {
-  pending: ["reviewed", "rejected"],
-  reviewed: ["interview", "rejected"],
+  pending: ["accepted", "rejected"],
+  accepted: ["interview", "rejected"],
   interview: ["hired", "rejected"],
   rejected: [],
   hired: [],

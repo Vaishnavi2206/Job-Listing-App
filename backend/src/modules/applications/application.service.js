@@ -9,6 +9,7 @@ const {
   APPLICATION_STATUS,
   VALID_STATUS_TRANSITIONS,
 } = require("../../shared/constants/applicationStatus");
+const { enqueueStatusEmail } = require('../../queues/email.queue');
 
 const createApplication = async (payload, userId) => {
   const job = await JobListing.findByPk(payload.jobListingId);
@@ -143,6 +144,10 @@ const updateApplicationStatus = async (applicationId, status, userId) => {
       {
         model: Company,
       },
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName", "username"],
+      },
     ],
   });
 
@@ -168,6 +173,28 @@ const updateApplicationStatus = async (applicationId, status, userId) => {
   await application.update({
     status: nextStatus,
   });
+
+  // 2. Enqueue email job — fire-and-forget from the HTTP caller's
+  // perspective, but we still await the queue.add() itself because
+  // that's just a fast Redis command, not the email send.
+  try {
+    console.log("application", application)
+    await enqueueStatusEmail({
+      applicationId: applicationId,
+      status,
+      recipientEmail: application.User.username,
+      applicantName: application.User.firstName + ' ' + application.User.lastName,
+      meta: { },
+    });
+  } catch (queueErr) {
+    // IMPORTANT: don't fail the whole API request just because the
+    // notification couldn't be queued — the status update itself
+    // already succeeded. Log for alerting / reconciliation instead.
+    // See README "Reconciliation" section for a sweep-job pattern
+    // that catches any application whose status changed but has no
+    // matching row in ApplicationNotificationLog.
+    console.error('Failed to enqueue status email:', queueErr);
+  }
 
   return application;
 };

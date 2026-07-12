@@ -30,7 +30,7 @@ const User = sequelize.define(
         }
       },
       set(value) {
-        this.setDataValue('email', value.toLowerCase());
+        this.setDataValue('username', value.toLowerCase());
       }
       },
     password: {

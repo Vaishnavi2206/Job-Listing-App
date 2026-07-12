@@ -15,6 +15,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
+    ports:
+      - "5432:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -23,6 +26,23 @@ services:
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: job-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy noeviction
+    volumes:
+      - redis_data:/data
+    networks:
+      - job-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,13 +58,55 @@ services:
     env_file:
       - .env
 
+    environment:
+      REDIS_HOST: redis
+      DB_HOST: postgres
+
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
     ports:
       - "5000:5000"
 
+    networks:
+      - job-network
+
+  worker:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    command: npm run start:worker
+    env_file:
+      - .env
+    environment:
+      REDIS_HOST: redis
+      DB_HOST: postgres
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - job-network
+    deploy:
+      replicas: 3
+
+  dashboard:
+    build:
+      context: ./backend
+    container_name: job-dashboard
+    restart: unless-stopped
+    command: npm run dashboard
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      redis:
+        condition: service_healthy
     networks:
       - job-network
 
@@ -81,13 +143,13 @@ services:
     volumes:
       - letsencrypt:/etc/letsencrypt
       - certbot-www:/var/www/certbot
+
 networks:
   job-network:
     driver: bridge
 
 volumes:
   postgres_data:
-
+  redis_data:
   letsencrypt:
-
   certbot-www:

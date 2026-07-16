@@ -79,7 +79,7 @@ const Auth = ({
         password: data.password,
       });
 
-      setToken(response.token);
+      setToken(response.accessToken);
       setUser(response.user);
 
       navigate("/dashboard");

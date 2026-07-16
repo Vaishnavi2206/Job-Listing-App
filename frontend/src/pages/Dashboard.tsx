@@ -83,7 +83,7 @@ const formatStatus = (status: string) =>
   status.charAt(0).toUpperCase() + status.slice(1);
 
 const Dashboard = () => {
-  const { user, setToken } = useAuth();
+  const { user, logout } = useAuth();
   const isEmployer = user?.roleName === "EMPLOYER";
   const [companies, setCompanies] = useState<Company[]>(
     []
@@ -354,8 +354,8 @@ const Dashboard = () => {
     }
   };
 
-  const logout = () => {
-    setToken(null);
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -383,7 +383,7 @@ const Dashboard = () => {
             </button>
           )}
 
-          <button onClick={logout}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       </header>
 

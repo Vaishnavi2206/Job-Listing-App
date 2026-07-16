@@ -8,7 +8,11 @@ const ProtectedRoute = ({
 }: {
   children: ReactNode;
 }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
+
+  if (isAuthLoading) {
+    return <p>Checking session...</p>;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;

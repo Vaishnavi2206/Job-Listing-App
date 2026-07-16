@@ -18,11 +18,26 @@ export const signupUser = async (
 
 export const loginUser = async (
   payload: LoginPayload
-): Promise<{ token: string; user: User }> => {
+): Promise<{ accessToken: string; user: User }> => {
   const response = await api.post(
     "/auth/login",
     payload
   );
+
+  return response.data;
+};
+
+export const refreshUserSession = async (): Promise<{
+  accessToken: string;
+  user: User;
+}> => {
+  const response = await api.post("/auth/refresh");
+
+  return response.data;
+};
+
+export const logoutUser = async () => {
+  const response = await api.post("/auth/logout");
 
   return response.data;
 };

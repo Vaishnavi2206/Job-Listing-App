@@ -1,11 +1,11 @@
 import "./JobCard.css";
+import { formatSalary } from "../../utils/dashboard.utils";
 
 const JobCard = ({
   job,
   isSelected,
   isApplied,
   setSelectedJob,
-  formatSalary,
 }) => {
   return (
     <button

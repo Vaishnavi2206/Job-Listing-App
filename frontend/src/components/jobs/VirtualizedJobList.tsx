@@ -5,7 +5,6 @@ import JobCard from "./JobCard";
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
 import { useJobs } from "../../hooks/useJobs";
 import { useDashboard } from "../../hooks/useDashboard";
-import { formatSalary } from "../../utils/dashboard.utils";
 
 const VirtualizedJobList = () => {
   "use no memo"; // useVirtualizer is incompatible with React Compiler memoization
@@ -25,34 +24,6 @@ const VirtualizedJobList = () => {
   });
 
   const virtualItems = rowVirtualizer.getVirtualItems();
-  // const lastItem = virtualItems[virtualItems.length - 1];
-
-//   useEffect(() => {
-//     if (!lastItem) return;
-
-//     const isLastLoadedJob =
-//       lastItem.index >= jobs.length - 1;
-
-//       console.count("loadMoreJobs called");
-
-// console.log({
-//   loadingMore,
-//   hasMore
-// });
-//     if (
-//       isLastLoadedJob &&
-//       hasMore &&
-//       !loadingMore
-//     ) {
-//       loadMore();
-//     }
-//   }, [
-//     lastItem,
-//     jobs.length,
-//     hasMore,
-//     loadingMore,
-//     loadMore,
-//   ]);
 
 useEffect(() => {
   if (loadingMore || !hasMore) return;
@@ -126,7 +97,6 @@ useEffect(() => {
                 isSelected={isSelected}
                 isApplied={isApplied}
                 setSelectedJob={setSelectedJob}
-                formatSalary={formatSalary}
               />
             </div>
           );

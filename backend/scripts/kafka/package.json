@@ -1,0 +1,14 @@
+{
+  "name": "kafka-scripts",
+  "version": "1.0.0",
+  "description": "Kafka admin/producer/consumer scripts for job-listing-app (application-status-updated topic)",
+  "type": "commonjs",
+  "scripts": {
+    "create-topic": "node create-topic.js",
+    "produce": "node producer.js",
+    "consume": "node consumer.js"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  }
+}

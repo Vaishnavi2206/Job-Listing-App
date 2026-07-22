@@ -2,10 +2,12 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { useDashboard } from '../hooks/useDashboard';
+import { useJobs } from '../hooks/useJobs';
 import { getApplicationJob } from '../utils/dashboard.utils';
 
 export default function AppliedJobsModal() {
-  const { applications, setSelectedJob, setShowAppliedJobs, jobs } = useDashboard();
+  const { applications, setShowAppliedJobs } = useDashboard();
+  const { jobs, setSelectedJob } = useJobs();
 const [open, setOpen] = React.useState(true);
 
   const handleClose = (value: string) => {

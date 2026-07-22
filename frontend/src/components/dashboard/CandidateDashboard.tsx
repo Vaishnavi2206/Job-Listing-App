@@ -1,19 +1,12 @@
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
 import VirtualizedJobList from "../jobs/VirtualizedJobList";
 import { useDashboard } from "../../hooks/useDashboard";
+import { useJobs } from "../../hooks/useJobs";
 import { formatSalary } from "../../utils/dashboard.utils";
 
 const CandidateDashboard = () => {
-  const {
-    jobs,
-    searchTerm, setSearchTerm,
-    selectedJob,
-    appliedJobIds,
-    isSearching,
-    applicationForm,
-    handleApply,
-    applying,
-  } = useDashboard();
+  const { appliedJobIds, applicationForm, handleApply, applying } = useDashboard();
+  const { jobs, searchTerm, setSearchTerm, selectedJob, isSearching } = useJobs();
   return (
     <div>
       <section className="candidateLayout">
@@ -72,7 +65,9 @@ const CandidateDashboard = () => {
 
               <form
                 className="applyForm"
-                onSubmit={applicationForm.handleSubmit(handleApply)}
+                onSubmit={applicationForm.handleSubmit((data) => {
+                  if (selectedJob) handleApply(data, selectedJob.id);
+                })}
               >
                 <h3>Apply for this job</h3>
 

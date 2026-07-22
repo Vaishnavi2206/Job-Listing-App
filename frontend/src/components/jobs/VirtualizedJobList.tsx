@@ -3,19 +3,17 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
 import JobCard from "./JobCard";
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
+import { useJobs } from "../../hooks/useJobs";
 import { useDashboard } from "../../hooks/useDashboard";
 import { formatSalary } from "../../utils/dashboard.utils";
 
 const VirtualizedJobList = () => {
+  "use no memo"; // useVirtualizer is incompatible with React Compiler memoization
   const {
-    jobs,
-    selectedJob, setSelectedJob,
-    appliedJobIds,
-    isSearching,
-    loadingMore,
-    hasMore,
-    loadMoreJobs: loadMore,
-  } = useDashboard();
+    jobs, selectedJob, setSelectedJob,
+    isSearching, loadingMore, hasMore, loadMoreJobs,
+  } = useJobs();
+  const { appliedJobIds } = useDashboard();
   const parentRef = useRef(null);
   const loadTriggeredRef = useRef(false);
 
@@ -67,7 +65,7 @@ useEffect(() => {
 
   if (shouldLoad && !loadTriggeredRef.current) {
     loadTriggeredRef.current = true;
-    loadMore();
+    loadMoreJobs();
   }
 
   if (!shouldLoad) {
@@ -78,7 +76,7 @@ useEffect(() => {
   jobs.length,
   hasMore,
   loadingMore,
-  loadMore,
+  loadMoreJobs,
 ]);
   
   if (isSearching) {

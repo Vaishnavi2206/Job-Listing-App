@@ -4,6 +4,7 @@ import EmployerDashboard from "../components/dashboard/EmployerDashboard";
 import CandidateDashboard from "../components/dashboard/CandidateDashboard";
 import AppliedJobsModal from "./AppliedJobsModal";
 import { DashboardProvider } from "../context/DashboardContext";
+import { JobsProvider } from "../context/JobsContext";
 import { useDashboard } from "../hooks/useDashboard";
 import useAuth from "../hooks/useAuth";
 
@@ -69,7 +70,9 @@ const DashboardInner = () => {
 
 const Dashboard = () => (
   <DashboardProvider>
-    <DashboardInner />
+    <JobsProvider>
+      <DashboardInner />
+    </JobsProvider>
   </DashboardProvider>
 );
 

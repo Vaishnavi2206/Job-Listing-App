@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { useDashboard } from "../../hooks/useDashboard";
+import { useJobs } from "../../hooks/useJobs";
 import {
   formatSalary,
   formatStatus,
@@ -7,16 +9,25 @@ import {
 
 const EmployerDashboard = () => {
   const {
-    companyForm,
-    jobForm,
-    myCompanies,
-    myJobs,
-    applications,
-    handleCreateCompany,
-    handleCreateJob,
-    updatingApplicationId,
-    handleUpdateApplicationStatus,
+    companyForm, jobForm,
+    myCompanies, applications,
+    handleCreateCompany, handleCreateJob,
+    updatingApplicationId, handleUpdateApplicationStatus,
   } = useDashboard();
+  const { jobs, reloadJobs } = useJobs();
+  const myJobs = useMemo(
+    () => jobs.filter((job) => myCompanies.some((c) => c.id === job.companyId)),
+    [jobs, myCompanies],
+  );
+
+  const onCreateJobSubmit = jobForm.handleSubmit(async (data) => {
+    try {
+      await handleCreateJob(data);
+      await reloadJobs();
+    } catch {
+      // error already set in context
+    }
+  });
   return (
     <div>
       <section className="dashboardGrid">
@@ -62,7 +73,7 @@ const EmployerDashboard = () => {
         <div className="dashboardCard">
           <h2>Create Job</h2>
 
-          <form onSubmit={jobForm.handleSubmit(handleCreateJob)}>
+          <form onSubmit={onCreateJobSubmit}>
             <select
               {...jobForm.register("companyId", {
                 required: true,

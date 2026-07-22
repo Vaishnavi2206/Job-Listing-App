@@ -1,6 +1,5 @@
 import api from "../api/axios";
-import type { Job, JobPayload } from "../types";
-import type { PaginatedJobsResponse } from "../types/job.types";
+import type { Job, JobPayload, PaginatedJobsResponse } from "../types";
 
 export const getJobs = async (limit = 10, cursor?: string | null, search?: string): Promise<PaginatedJobsResponse> => {
   console.log("api call", cursor);

@@ -3,18 +3,19 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
 import JobCard from "./JobCard";
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
+import { useDashboard } from "../../hooks/useDashboard";
+import { formatSalary } from "../../utils/dashboard.utils";
 
-const VirtualizedJobList = ({
-  jobs,
-  selectedJob,
-  setSelectedJob,
-  appliedJobIds,
-  formatSalary,
-  isSearching,
-  loadingMore,
-  hasMore,
-  loadMore,
-}) => {
+const VirtualizedJobList = () => {
+  const {
+    jobs,
+    selectedJob, setSelectedJob,
+    appliedJobIds,
+    isSearching,
+    loadingMore,
+    hasMore,
+    loadMoreJobs: loadMore,
+  } = useDashboard();
   const parentRef = useRef(null);
   const loadTriggeredRef = useRef(false);
 

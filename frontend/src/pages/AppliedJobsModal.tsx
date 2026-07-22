@@ -1,17 +1,11 @@
 import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import { useDashboard } from '../hooks/useDashboard';
+import { getApplicationJob } from '../utils/dashboard.utils';
 
-// const emails = ['username@gmail.com', 'user02@gmail.com'];
-
-export interface SimpleDialogProps {
-  open: boolean;
-  selectedValue: string;
-  onClose: (value: string) => void;
-}
-
-export default function AppliedJobsModal({applications,getApplicationJob,setSelectedJob, setShowAppliedJobs, jobs}: any) {
-//   const { onClose, selectedValue, open } = props;
+export default function AppliedJobsModal() {
+  const { applications, setSelectedJob, setShowAppliedJobs, jobs } = useDashboard();
 const [open, setOpen] = React.useState(true);
 
   const handleClose = (value: string) => {

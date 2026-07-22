@@ -1,18 +1,22 @@
-const EmployerDashboard = ({
-  companyForm,
-  myCompanies,
-  myJobs,
-  applications,
-  jobForm,
-  handleCreateCompany,
-  handleCreateJob,
+import { useDashboard } from "../../hooks/useDashboard";
+import {
   formatSalary,
-  validApplicationTransitions,
   formatStatus,
-  updatingApplicationId,
-  handleUpdateApplicationStatus
-}) => {
-  console.log("formatSalary", formatSalary);
+  validApplicationTransitions,
+} from "../../utils/dashboard.utils";
+
+const EmployerDashboard = () => {
+  const {
+    companyForm,
+    jobForm,
+    myCompanies,
+    myJobs,
+    applications,
+    handleCreateCompany,
+    handleCreateJob,
+    updatingApplicationId,
+    handleUpdateApplicationStatus,
+  } = useDashboard();
   return (
     <div>
       <section className="dashboardGrid">

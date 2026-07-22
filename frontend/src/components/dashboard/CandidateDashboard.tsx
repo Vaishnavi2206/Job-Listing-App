@@ -1,22 +1,19 @@
 import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
 import VirtualizedJobList from "../jobs/VirtualizedJobList";
+import { useDashboard } from "../../hooks/useDashboard";
+import { formatSalary } from "../../utils/dashboard.utils";
 
-const CandidateDashboard = ({
-  jobs,
-  searchTerm,
-  setSearchTerm,
-  selectedJob,
-  setSelectedJob,
-  appliedJobIds,
-  isSearching,
-  applicationForm,
-  handleApply,
-  formatSalary,
-  applying,
-  loadingMore,
-  hasMore,
-  loadMore,
-}) => {
+const CandidateDashboard = () => {
+  const {
+    jobs,
+    searchTerm, setSearchTerm,
+    selectedJob,
+    appliedJobIds,
+    isSearching,
+    applicationForm,
+    handleApply,
+    applying,
+  } = useDashboard();
   return (
     <div>
       <section className="candidateLayout">
@@ -34,39 +31,8 @@ const CandidateDashboard = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-{/* 
-          <div className="candidateListScroller">
-            {isSearching ? (
-              <JobDetailsSkeleton />
-            ) : (
-              jobs.map((job) => {
-                const isSelected = selectedJob?.id === job.id;
-                const isApplied = appliedJobIds.has(job.id);
 
-                return (
-                  <JobCard
-                    job={job}
-                    isSelected={isSelected}
-                    isApplied={isApplied}
-                    setSelectedJob={setSelectedJob}
-                    formatSalary={formatSalary}
-                  />
-                );
-              })
-            )}
-          </div> */}
-
-          <VirtualizedJobList
-            jobs={jobs}
-            selectedJob={selectedJob}
-            setSelectedJob={setSelectedJob}
-            appliedJobIds={appliedJobIds}
-            formatSalary={formatSalary}
-            isSearching={isSearching}
-            loadingMore= {loadingMore}
-            hasMore={hasMore}
-            loadMore={loadMore}
-          />
+          <VirtualizedJobList />
         </aside>
 
         <article className="candidateJobDetails">

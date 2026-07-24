@@ -8,11 +8,11 @@
  * to SMTP latency.
  */
 
-const { Queue } = require('bullmq');
-const { createRedisConnection } = require('../config/redis');
-require('dotenv').config();
+const { Queue } = require("bullmq");
+const { createRedisConnection } = require("../config/redis");
+require("dotenv").config();
 
-const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || 'application-status-emails';
+const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || "application-status-emails";
 
 // One dedicated connection for this Queue instance.
 const connection = createRedisConnection();
@@ -22,7 +22,7 @@ const emailQueue = new Queue(QUEUE_NAME, {
   defaultJobOptions: {
     attempts: Number(process.env.EMAIL_JOB_ATTEMPTS || 5),
     backoff: {
-      type: 'exponential',
+      type: "exponential",
       delay: Number(process.env.EMAIL_JOB_BACKOFF_DELAY_MS || 5000),
     },
     // Auto-cleanup so Redis memory doesn't grow unbounded in prod.
@@ -50,11 +50,17 @@ const emailQueue = new Queue(QUEUE_NAME, {
  * @param {string} params.applicantName
  * @param {Object} [params.meta] - any extra data the email template needs
  */
-async function enqueueStatusEmail({ applicationId, status, recipientEmail, applicantName, meta = {} }) {
+async function enqueueStatusEmail({
+  applicationId,
+  status,
+  recipientEmail,
+  applicantName,
+  meta = {},
+}) {
   const jobId = `status-email:${applicationId}:${status}`;
 
   const job = await emailQueue.add(
-    'send-status-email',
+    "send-status-email",
     {
       applicationId,
       status,

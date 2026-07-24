@@ -22,17 +22,17 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: 'This email address is already in use.'
+        msg: "This email address is already in use.",
       },
       validate: {
         isEmail: {
-          msg: 'Please provide a valid email address.'
-        }
+          msg: "Please provide a valid email address.",
+        },
       },
       set(value) {
-        this.setDataValue('username', value.toLowerCase());
-      }
+        this.setDataValue("username", value.toLowerCase());
       },
+    },
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -50,7 +50,7 @@ const User = sequelize.define(
     tableName: "users",
     timestamps: true,
     underscored: true,
-  },
+  }
 );
 
 module.exports = User;

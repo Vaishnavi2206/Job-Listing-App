@@ -22,15 +22,15 @@
  *   since it's just issuing regular commands.
  */
 
-const IORedis = require('ioredis');
-require('dotenv').config();
+const IORedis = require("ioredis");
+require("dotenv").config();
 
 function buildRedisOptions() {
   return {
-    host: process.env.REDIS_HOST || '127.0.0.1',
+    host: process.env.REDIS_HOST || "127.0.0.1",
     port: Number(process.env.REDIS_PORT || 6379),
     password: process.env.REDIS_PASSWORD || undefined,
-    tls: process.env.REDIS_TLS === 'true' ? {} : undefined,
+    tls: process.env.REDIS_TLS === "true" ? {} : undefined,
 
     // REQUIRED by BullMQ. Without this, ioredis throws after 20 retries
     // and BullMQ's internal blocking calls break.
@@ -55,14 +55,14 @@ function buildRedisOptions() {
 function createRedisConnection() {
   const connection = new IORedis(buildRedisOptions());
 
-  connection.on('error', (err) => {
+  connection.on("error", (err) => {
     // Do not crash the process on transient Redis errors — ioredis will
     // keep retrying per retryStrategy above. Just log for visibility.
-    console.error('[redis] connection error:', err.message);
+    console.error("[redis] connection error:", err.message);
   });
 
-  connection.on('connect', () => {
-    console.log('[redis] connected');
+  connection.on("connect", () => {
+    console.log("[redis] connected");
   });
 
   return connection;

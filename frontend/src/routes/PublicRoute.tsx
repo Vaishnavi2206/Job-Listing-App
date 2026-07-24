@@ -3,11 +3,7 @@ import type { ReactNode } from "react";
 
 import useAuth from "../hooks/useAuth";
 
-const PublicRoute = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
+const PublicRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, isAuthLoading } = useAuth();
 
   if (isAuthLoading) {

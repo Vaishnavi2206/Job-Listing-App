@@ -4,9 +4,7 @@ require("dotenv").config({
   path: path.resolve(__dirname, "../../.env"),
 });
 
-console.log(
-  path.resolve(__dirname, "../../.env")
-);
+console.log(path.resolve(__dirname, "../../.env"));
 
 const sequelize = require("../config/db");
 const JobListing = require("../modules/jobListings/jobListing.model");
@@ -33,11 +31,7 @@ const locations = [
   "Gurgaon",
 ];
 
-const employmentTypes = [
-  "Full Time",
-  "Part Time",
-  "Contract",
-];
+const employmentTypes = ["Full Time", "Part Time", "Contract"];
 
 const jobTemplates = [
   {
@@ -106,11 +100,11 @@ Excellent growth opportunities and competitive compensation package.
 async function generateJobs() {
   try {
     console.log({
-  DB_HOST: process.env.DB_HOST,
-  DB_NAME: process.env.DB_NAME,
-  DB_USER: process.env.DB_USER,
-  DB_PASSWORD: process.env.DB_PASSWORD,
-});
+      DB_HOST: process.env.DB_HOST,
+      DB_NAME: process.env.DB_NAME,
+      DB_USER: process.env.DB_USER,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+    });
     await sequelize.authenticate();
 
     console.log("Connected to database");
@@ -127,20 +121,13 @@ async function generateJobs() {
         const template = randomItem(jobTemplates);
         const location = randomItem(locations);
 
-        const salaryMin =
-          300000 + Math.floor(Math.random() * 2200000);
+        const salaryMin = 300000 + Math.floor(Math.random() * 2200000);
 
-        const salaryMax =
-          salaryMin +
-          200000 +
-          Math.floor(Math.random() * 800000);
+        const salaryMax = salaryMin + 200000 + Math.floor(Math.random() * 800000);
 
         jobs.push({
           title: template.title,
-          description: generateDescription(
-            template,
-            location
-          ),
+          description: generateDescription(template, location),
           location,
           salaryMin,
           salaryMax,
@@ -162,9 +149,7 @@ async function generateJobs() {
       );
     }
 
-    console.log(
-      `✅ Successfully inserted ${TOTAL_JOBS.toLocaleString()} jobs`
-    );
+    console.log(`✅ Successfully inserted ${TOTAL_JOBS.toLocaleString()} jobs`);
 
     process.exit(0);
   } catch (error) {

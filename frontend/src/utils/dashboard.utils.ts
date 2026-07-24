@@ -5,11 +5,9 @@ export const formatSalary = (job: Job) =>
     ? `${job.salaryMin || "Open"} - ${job.salaryMax || "Open"}`
     : "Salary open";
 
-export const formatStatus = (status: string) =>
-  status.charAt(0).toUpperCase() + status.slice(1);
+export const formatStatus = (status: string) => status.charAt(0).toUpperCase() + status.slice(1);
 
-export const getApplicationJob = (application: Application) =>
-  application.JobListing;
+export const getApplicationJob = (application: Application) => application.JobListing;
 
 export const validApplicationTransitions: Record<string, string[]> = {
   pending: ["accepted", "rejected"],

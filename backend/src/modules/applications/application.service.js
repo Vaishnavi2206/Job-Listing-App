@@ -4,18 +4,24 @@ const JobListing = require("../jobListings/jobListing.model");
 
 const Company = require("../companies/company.model");
 const User = require("../users/user.model");
+const {
+  NotFoundError,
+  ConflictError,
+  ForbiddenError,
+  BadRequestError,
+} = require("../../shared/utils/errors");
 
 const {
   APPLICATION_STATUS,
   VALID_STATUS_TRANSITIONS,
 } = require("../../shared/constants/applicationStatus");
-const { enqueueStatusEmail } = require('../../queues/email.queue');
+const { enqueueStatusEmail } = require("../../queues/email.queue");
 
 const createApplication = async (payload, userId) => {
   const job = await JobListing.findByPk(payload.jobListingId);
 
   if (!job) {
-    throw new Error("Job not found");
+    throw new NotFoundError("Job not found");
   }
 
   /*
@@ -30,7 +36,7 @@ const createApplication = async (payload, userId) => {
   });
 
   if (existingApplication) {
-    throw new Error("You already applied for this job");
+    throw new ConflictError("You already applied for this job");
   }
 
   const application = await Application.create({
@@ -72,11 +78,11 @@ const getCompanyApplications = async (companyId, userId) => {
   const company = await Company.findByPk(companyId);
 
   if (!company) {
-    throw new Error("Company not found");
+    throw new NotFoundError("Company not found");
   }
 
   if (company.createdBy !== userId) {
-    throw new Error("You are not allowed to view these applications");
+    throw new ForbiddenError("You are not allowed to view these applications");
   }
 
   return await Application.findAll({
@@ -91,12 +97,7 @@ const getCompanyApplications = async (companyId, userId) => {
 
       {
         model: User,
-        attributes: [
-          "id",
-          "firstName",
-          "lastName",
-          "username",
-        ],
+        attributes: ["id", "firstName", "lastName", "username"],
       },
     ],
   });
@@ -112,11 +113,11 @@ const getJobApplications = async (jobId, userId) => {
   });
 
   if (!job) {
-    throw new Error("Job not found");
+    throw new NotFoundError("Job not found");
   }
 
   if (job.Company.createdBy !== userId) {
-    throw new Error("You are not allowed to view these applications");
+    throw new ForbiddenError("You are not allowed to view these applications");
   }
 
   return await Application.findAll({
@@ -127,12 +128,7 @@ const getJobApplications = async (jobId, userId) => {
     include: [
       {
         model: User,
-        attributes: [
-          "id",
-          "firstName",
-          "lastName",
-          "username",
-        ],
+        attributes: ["id", "firstName", "lastName", "username"],
       },
     ],
   });
@@ -152,22 +148,19 @@ const updateApplicationStatus = async (applicationId, status, userId) => {
   });
 
   if (!application) {
-    throw new Error("Application not found");
+    throw new NotFoundError("Application not found");
   }
 
   if (application.Company.createdBy !== userId) {
-    throw new Error("You are not allowed to update this application");
+    throw new ForbiddenError("You are not allowed to update this application");
   }
 
   const currentStatus = application.status.toLowerCase();
   const nextStatus = status.toLowerCase();
-  const allowedTransitions =
-    VALID_STATUS_TRANSITIONS[currentStatus] || [];
+  const allowedTransitions = VALID_STATUS_TRANSITIONS[currentStatus] || [];
 
   if (!allowedTransitions.includes(nextStatus)) {
-    throw new Error(
-      `Invalid status transition from ${currentStatus} to ${nextStatus}`,
-    );
+    throw new BadRequestError(`Invalid status transition from ${currentStatus} to ${nextStatus}`);
   }
 
   await application.update({
@@ -178,13 +171,13 @@ const updateApplicationStatus = async (applicationId, status, userId) => {
   // perspective, but we still await the queue.add() itself because
   // that's just a fast Redis command, not the email send.
   try {
-    console.log("application", application)
+    console.log("application", application);
     await enqueueStatusEmail({
       applicationId: applicationId,
       status,
       recipientEmail: application.User.username,
-      applicantName: application.User.firstName + ' ' + application.User.lastName,
-      meta: { },
+      applicantName: application.User.firstName + " " + application.User.lastName,
+      meta: {},
     });
   } catch (queueErr) {
     // IMPORTANT: don't fail the whole API request just because the
@@ -193,7 +186,7 @@ const updateApplicationStatus = async (applicationId, status, userId) => {
     // See README "Reconciliation" section for a sweep-job pattern
     // that catches any application whose status changed but has no
     // matching row in ApplicationNotificationLog.
-    console.error('Failed to enqueue status email:', queueErr);
+    console.error("Failed to enqueue status email:", queueErr);
   }
 
   return application;

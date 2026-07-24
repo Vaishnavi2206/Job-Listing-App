@@ -1,12 +1,8 @@
 const express = require("express");
 
-const authMiddleware = require(
-  "../../middleware/auth.middleware"
-);
+const authMiddleware = require("../../middleware/auth.middleware");
 
-const employerOnly = require(
-  "../../middleware/employerOnly.middleware"
-);
+const employerOnly = require("../../middleware/employerOnly.middleware");
 
 const {
   createJob,
@@ -22,25 +18,10 @@ router.get("/", getAllJobs);
 
 router.get("/:id", getJobById);
 
-router.post(
-  "/",
-  authMiddleware,
-  employerOnly,
-  createJob
-);
+router.post("/", authMiddleware, employerOnly, createJob);
 
-router.patch(
-  "/:id",
-  authMiddleware,
-  employerOnly,
-  updateJob
-);
+router.patch("/:id", authMiddleware, employerOnly, updateJob);
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  employerOnly,
-  deleteJob
-);
+router.delete("/:id", authMiddleware, employerOnly, deleteJob);
 
 module.exports = router;

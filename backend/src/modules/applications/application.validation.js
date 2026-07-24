@@ -1,19 +1,13 @@
 const { z } = require("zod");
-const {
-  APPLICATION_STATUS,
-} = require(
-  "../../shared/constants/applicationStatus"
-);
+const { APPLICATION_STATUS } = require("../../shared/constants/applicationStatus");
 
-const createApplicationSchema =
-  z.object({
-    jobListingId: z.string().uuid(),
+const createApplicationSchema = z.object({
+  jobListingId: z.string().uuid(),
 
-    resumeUrl: z.string().optional(),
+  resumeUrl: z.string().optional(),
 
-    coverLetter: z.string().optional(),
-  });
-
+  coverLetter: z.string().optional(),
+});
 
 const updateStatusSchema = z.object({
   status: z.enum([

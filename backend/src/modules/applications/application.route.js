@@ -1,16 +1,10 @@
 const express = require("express");
 
-const authMiddleware = require(
-  "../../middleware/auth.middleware"
-);
+const authMiddleware = require("../../middleware/auth.middleware");
 
-const employerOnly = require(
-  "../../middleware/employerOnly.middleware"
-);
+const employerOnly = require("../../middleware/employerOnly.middleware");
 
-const candidateOnly = require(
-  "../../middleware/candidateOnly.middleware"
-);
+const candidateOnly = require("../../middleware/candidateOnly.middleware");
 
 const {
   createApplication,
@@ -22,39 +16,14 @@ const {
 
 const router = express.Router();
 
-router.post(
-  "/",
-  authMiddleware,
-  candidateOnly,
-  createApplication
-);
+router.post("/", authMiddleware, candidateOnly, createApplication);
 
-router.get(
-  "/me",
-  authMiddleware,
-  candidateOnly,
-  getMyApplications
-);
+router.get("/me", authMiddleware, candidateOnly, getMyApplications);
 
-router.get(
-  "/company/:companyId",
-  authMiddleware,
-  employerOnly,
-  getCompanyApplications
-);
+router.get("/company/:companyId", authMiddleware, employerOnly, getCompanyApplications);
 
-router.get(
-  "/job/:jobId",
-  authMiddleware,
-  employerOnly,
-  getJobApplications
-);
+router.get("/job/:jobId", authMiddleware, employerOnly, getJobApplications);
 
-router.patch(
-  "/:id/status",
-  authMiddleware,
-  employerOnly,
-  updateApplicationStatus
-);
+router.patch("/:id/status", authMiddleware, employerOnly, updateApplicationStatus);
 
 module.exports = router;

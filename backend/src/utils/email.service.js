@@ -10,7 +10,7 @@
  * for an SES SDK call is a ~10 line change contained entirely in this file.
  */
 
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 let _transporter = null;
 
@@ -18,7 +18,7 @@ function getTransporter() {
   if (_transporter) return _transporter;
 
   _transporter =
-    process.env.NODE_ENV === 'test'
+    process.env.NODE_ENV === "test"
       ? nodemailer.createTransport({ jsonTransport: true })
       : nodemailer.createTransport({
           host: process.env.SMTP_HOST,
@@ -39,33 +39,33 @@ function getTransporter() {
 function renderTemplate(status, { applicantName, applicationId, meta }) {
   const s = status.toLowerCase();
 
-  if (s === 'accepted') {
+  if (s === "accepted") {
     return {
       subject: `Your application has been accepted`,
       html: `
         <p>Hi ${applicantName},</p>
         <p>Great news! Your application <strong>${applicationId}</strong> has been accepted by the employer.</p>
         <p>They will review your profile and reach out if you are shortlisted for an interview.</p>
-        ${meta.notes ? `<p>Notes: ${meta.notes}</p>` : ''}
+        ${meta.notes ? `<p>Notes: ${meta.notes}</p>` : ""}
         <p>Best of luck,<br/>Job Listing Team</p>
       `,
     };
   }
 
-  if (s === 'interview') {
+  if (s === "interview") {
     return {
       subject: `You have been shortlisted for an interview`,
       html: `
         <p>Hi ${applicantName},</p>
         <p>Congratulations! You have been shortlisted for an interview for application <strong>${applicationId}</strong>.</p>
         <p>The employer will contact you shortly with interview details.</p>
-        ${meta.notes ? `<p>Notes: ${meta.notes}</p>` : ''}
+        ${meta.notes ? `<p>Notes: ${meta.notes}</p>` : ""}
         <p>Best of luck,<br/>Job Listing Team</p>
       `,
     };
   }
 
-  if (s === 'hired') {
+  if (s === "hired") {
     return {
       subject: `Congratulations — you have been hired!`,
       html: `
@@ -77,13 +77,13 @@ function renderTemplate(status, { applicantName, applicationId, meta }) {
     };
   }
 
-  if (s === 'rejected') {
+  if (s === "rejected") {
     return {
       subject: `Update on your application`,
       html: `
         <p>Hi ${applicantName},</p>
         <p>Thank you for your interest. Unfortunately, your application <strong>${applicationId}</strong> has not moved forward at this time.</p>
-        ${meta.reason ? `<p>Reason: ${meta.reason}</p>` : ''}
+        ${meta.reason ? `<p>Reason: ${meta.reason}</p>` : ""}
         <p>We encourage you to apply for other roles that match your profile.</p>
         <p>Regards,<br/>Job Listing Team</p>
       `,

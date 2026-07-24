@@ -3,13 +3,9 @@ const User = require("../modules/users/user.model");
 const Role = require("../modules/roles/role.model");
 
 const Company = require("../modules/companies/company.model");
-const JobListing = require(
-  "../modules/jobListings/jobListing.model"
-);
+const JobListing = require("../modules/jobListings/jobListing.model");
 
-const Application = require(
-  "../modules/applications/application.model"
-);
+const Application = require("../modules/applications/application.model");
 
 Role.hasMany(User, {
   foreignKey: "roleId",

@@ -9,15 +9,15 @@
  * it publicly — it can trigger retries/removals of real jobs.
  */
 
-const express = require('express');
-const { createBullBoard } = require('@bull-board/api');
-const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
-const { ExpressAdapter } = require('@bull-board/express');
-const { emailQueue } = require('../queues/email.queue');
-require('dotenv').config();
+const express = require("express");
+const { createBullBoard } = require("@bull-board/api");
+const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
+const { ExpressAdapter } = require("@bull-board/express");
+const { emailQueue } = require("../queues/email.queue");
+require("dotenv").config();
 
 const serverAdapter = new ExpressAdapter();
-serverAdapter.setBasePath('/admin/queues');
+serverAdapter.setBasePath("/admin/queues");
 
 createBullBoard({
   queues: [new BullMQAdapter(emailQueue)],
@@ -25,7 +25,7 @@ createBullBoard({
 });
 
 const app = express();
-app.use('/admin/queues', serverAdapter.getRouter());
+app.use("/admin/queues", serverAdapter.getRouter());
 
 const PORT = process.env.BULL_BOARD_PORT || 3001;
 app.listen(PORT, () => {

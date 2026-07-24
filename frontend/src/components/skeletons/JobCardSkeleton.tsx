@@ -1,4 +1,4 @@
-import './JobCardSkeleton.css';
+import "./JobCardSkeleton.css";
 
 export const JobCardSkeleton = () => (
   <div className="jobSkeleton">

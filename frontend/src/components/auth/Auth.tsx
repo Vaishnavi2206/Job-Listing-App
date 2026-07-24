@@ -4,10 +4,7 @@ import { useForm } from "react-hook-form";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  loginUser,
-  signupUser,
-} from "../../services/auth.service";
+import { loginUser, signupUser } from "../../services/auth.service";
 
 import useAuth from "../../hooks/useAuth";
 
@@ -21,10 +18,7 @@ type AuthFormData = {
   password: string;
 };
 
-const getErrorMessage = (
-  requestError: unknown,
-  fallback: string
-) => {
+const getErrorMessage = (requestError: unknown, fallback: string) => {
   const response = (
     requestError as {
       response?: { data?: { message?: string } };
@@ -34,11 +28,7 @@ const getErrorMessage = (
   return response?.data?.message || fallback;
 };
 
-const Auth = ({
-  formType,
-}: {
-  formType: "signup" | "login";
-}) => {
+const Auth = ({ formType }: { formType: "signup" | "login" }) => {
   const isSignup = formType === "signup";
 
   const navigate = useNavigate();
@@ -48,11 +38,7 @@ const Auth = ({
 
   const [error, setError] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm<AuthFormData>();
+  const { register, handleSubmit, reset } = useForm<AuthFormData>();
 
   const onSubmit = async (data: AuthFormData) => {
     try {
@@ -61,7 +47,7 @@ const Auth = ({
       setError("");
 
       if (isSignup) {
-               await signupUser({
+        await signupUser({
           firstName: data.firstName,
           lastName: data.lastName,
           username: data.username,
@@ -83,14 +69,8 @@ const Auth = ({
       setUser(response.user);
 
       navigate("/dashboard");
-
     } catch (error) {
-      setError(
-        getErrorMessage(
-          error,
-          "Something went wrong"
-        )
-      );
+      setError(getErrorMessage(error, "Something went wrong"));
     } finally {
       setLoading(false);
     }
@@ -98,65 +78,33 @@ const Auth = ({
 
   return (
     <div className="authCard">
-      <h2>
-        {isSignup
-          ? "Create Account"
-          : "Welcome Back"}
-                </h2>
+      <h2>{isSignup ? "Create Account" : "Welcome Back"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {isSignup && (
           <>
-            <input
-              type="text"
-              placeholder="First Name"
-              {...register("firstName")}
-            />
+            <input type="text" placeholder="First Name" {...register("firstName")} />
 
-            <input
-              type="text"
-              placeholder="Last Name"
-              {...register("lastName")}
-            />
+            <input type="text" placeholder="Last Name" {...register("lastName")} />
 
             <select {...register("roleName")}>
-              <option value="">
-                Select Role
-              </option>
+              <option value="">Select Role</option>
 
-                            <option value="EMPLOYER">
-                Employer
-              </option>
+              <option value="EMPLOYER">Employer</option>
 
-              <option value="CANDIDATE">
-                Candidate
-              </option>
+              <option value="CANDIDATE">Candidate</option>
             </select>
           </>
         )}
 
-        <input
-          type="text"
-          placeholder="Username"
-          {...register("username")}
-        />
+        <input type="text" placeholder="Username" {...register("username")} />
 
-        <input
-          type="password"
-          placeholder="Password"
-          {...register("password")}
-        />
+        <input type="password" placeholder="Password" {...register("password")} />
 
-               {error && (
-          <p className="errorText">{error}</p>
-        )}
+        {error && <p className="errorText">{error}</p>}
 
         <button disabled={loading}>
-          {loading
-            ? "Please wait..."
-            : isSignup
-            ? "Sign Up"
-            : "Login"}
+          {loading ? "Please wait..." : isSignup ? "Sign Up" : "Login"}
         </button>
       </form>
     </div>

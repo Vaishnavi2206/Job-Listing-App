@@ -4,14 +4,14 @@ import Auth from "../components/auth/Auth";
 import "../App.css";
 
 const Home = () => {
-    // const [jobs, setJobs] = useState<Job[]>([]);
-    
+  // const [jobs, setJobs] = useState<Job[]>([]);
+
   //   const [loading, setLoading] = useState(true);
-    
+
   //   useEffect(() => {
   //       const fetchJobs = async () => {
   //           try {
-                
+
   //           //  const   data = await  getJobs();
 
   //       // setJobs(data);
@@ -25,19 +25,13 @@ const Home = () => {
   //   fetchJobs();
   // }, []);
 
-
-    return (
+  return (
     <div className="homePage">
       <div className="heroSection">
         <div>
-          <h1>
-            Find Your Dream Job
-          </h1>
+          <h1>Find Your Dream Job</h1>
 
-          <p>
-            Discover jobs from top
-            companies.
-          </p>
+          <p>Discover jobs from top companies.</p>
         </div>
 
         <div className="authContainer">
@@ -47,7 +41,7 @@ const Home = () => {
         </div>
       </div>
 
-        {/* <section className="jobsSection">
+      {/* <section className="jobsSection">
         <h2>Latest Jobs</h2>
 
         {loading ? (

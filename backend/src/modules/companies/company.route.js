@@ -1,8 +1,6 @@
 const express = require("express");
 
-const authMiddleware = require(
-  "../../middleware/auth.middleware"
-);
+const authMiddleware = require("../../middleware/auth.middleware");
 
 const {
   createCompany,
@@ -26,22 +24,10 @@ router.get("/:id", getCompanyById);
   Protected Routes
 */
 
-router.post(
-  "/",
-  authMiddleware,
-  createCompany
-);
+router.post("/", authMiddleware, createCompany);
 
-router.patch(
-  "/:id",
-  authMiddleware,
-  updateCompany
-);
+router.patch("/:id", authMiddleware, updateCompany);
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  deleteCompany
-);
+router.delete("/:id", authMiddleware, deleteCompany);
 
 module.exports = router;

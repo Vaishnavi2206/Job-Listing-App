@@ -1,22 +1,16 @@
 const JobListing = require("./jobListing.model");
 const { Op, literal, where } = require("sequelize");
 
-const Company = require(
-  "../companies/company.model"
-);
+const Company = require("../companies/company.model");
 const sequelize = require("../../config/db");
 const { decodeCursor, encodeCursor } = require("../../utils/cursor");
+const { NotFoundError, ForbiddenError } = require("../../shared/utils/errors");
 
-const createJob = async (
-  payload,
-  userId
-) => {
-  const company = await Company.findByPk(
-    payload.companyId
-  );
+const createJob = async (payload, userId) => {
+  const company = await Company.findByPk(payload.companyId);
 
   if (!company) {
-    throw new Error("Company not found");
+    throw new NotFoundError("Company not found");
   }
 
   /*
@@ -24,9 +18,7 @@ const createJob = async (
   */
 
   if (company.createdBy !== userId) {
-    throw new Error(
-      "You can only create jobs for your own company"
-    );
+    throw new ForbiddenError("You can only create jobs for your own company");
   }
 
   const job = await JobListing.create(payload);
@@ -34,10 +26,9 @@ const createJob = async (
   return job;
 };
 
-
 const _getAllJobs = async (options) => {
   const { pageSize = 10, pageNo = 1, search } = options;
-let order = [["createdAt", "DESC"]];
+  let order = [["createdAt", "DESC"]];
 
   const query = {
     where: {
@@ -52,7 +43,7 @@ let order = [["createdAt", "DESC"]];
     limit: parseInt(pageSize, 10),
     offset: pageNo,
   };
-  
+
   if (search?.trim()) {
     where[Op.and] = [
       sequelize.literal(`
@@ -84,31 +75,25 @@ let order = [["createdAt", "DESC"]];
   //   ...query,
 
   //   });
-const start = Date.now();
-    const jobs = await JobListing.findAll(query);
+  const start = Date.now();
+  const jobs = await JobListing.findAll(query);
 
   console.log(`DB took ${Date.now() - start} ms`);
   return jobs;
-    };
+};
 
 const getAllJobs = async (options) => {
-  const {
-      limit = 10,
-      cursor,
-      search
-  } = options;
+  const { limit = 10, cursor, search } = options;
   let order = [
-      ["createdAt", "DESC"],
-      ["id", "DESC"],
+    ["createdAt", "DESC"],
+    ["id", "DESC"],
   ];
 
   const cursorData = decodeCursor(cursor);
-  console.log("cursor",decodeCursor(cursor));
+  console.log("cursor", decodeCursor(cursor));
   const where = {
-      isActive: true,
+    isActive: true,
   };
-
-
 
   /**
    * ---------------------------------------------------------
@@ -123,7 +108,7 @@ const getAllJobs = async (options) => {
    * considerably more complicated.
    *
    */
-  
+
   if (search?.trim()) {
     where[Op.and] = [
       sequelize.literal(`
@@ -154,15 +139,15 @@ const getAllJobs = async (options) => {
     ];
   }
 
-    /**
+  /**
    * ---------------------------------------------------------
    * Cursor Pagination
    * ---------------------------------------------------------
    */
 
-    if (cursorData && !search?.trim()) {
-      where[Op.and] = [
-        sequelize.literal(`
+  if (cursorData && !search?.trim()) {
+    where[Op.and] = [
+      sequelize.literal(`
           ("JobListing"."createdAt", "JobListing"."id")
           <
           (
@@ -170,11 +155,10 @@ const getAllJobs = async (options) => {
             ${sequelize.escape(cursorData.id)}
           )
         `),
-      ];
-    }
+    ];
+  }
 
-
-    const query = {
+  const query = {
     where,
     order,
     limit: Number(limit) + 1,
@@ -185,34 +169,32 @@ const getAllJobs = async (options) => {
   const hasMore = jobs.length > Number(limit);
 
   if (hasMore) {
-      jobs.pop();
+    jobs.pop();
   }
 
   let nextCursor = null;
 
-if (hasMore && jobs.length) {
-
+  if (hasMore && jobs.length) {
     const lastJob = jobs[jobs.length - 1];
 
     nextCursor = encodeCursor({
-        createdAt: lastJob.createdAt,
-        id: lastJob.id,
+      createdAt: lastJob.createdAt,
+      id: lastJob.id,
     });
+  }
 
-}
-
-// console.log(jobs[jobs.length - 1].createdAt);
-// console.log(jobs[jobs.length - 1].id);
-console.log(nextCursor,"nextCursor");
+  // console.log(jobs[jobs.length - 1].createdAt);
+  // console.log(jobs[jobs.length - 1].id);
+  console.log(nextCursor, "nextCursor");
   // console.log(`DB took ${Date.now() - start} ms`);
- return {
+  return {
     jobs,
     pagination: {
-        hasMore,
-        nextCursor,
+      hasMore,
+      nextCursor,
     },
+  };
 };
-    };
 
 const getJobById = async (id) => {
   const job = await JobListing.findByPk(id, {
@@ -224,36 +206,27 @@ const getJobById = async (id) => {
   });
 
   if (!job) {
-    throw new Error("Job not found");
+    throw new NotFoundError("Job not found");
   }
 
   return job;
 };
 
-const updateJob = async (
-  jobId,
-  payload,
-  userId
-) => {
-  const job = await JobListing.findByPk(
-    jobId,
-    {
-      include: [
-        {
-          model: Company,
-        },
-      ],
-    }
-  );
+const updateJob = async (jobId, payload, userId) => {
+  const job = await JobListing.findByPk(jobId, {
+    include: [
+      {
+        model: Company,
+      },
+    ],
+  });
 
   if (!job) {
-    throw new Error("Job not found");
+    throw new NotFoundError("Job not found");
   }
 
   if (job.Company.createdBy !== userId) {
-    throw new Error(
-      "You are not allowed to update this job"
-    );
+    throw new ForbiddenError("You are not allowed to update this job");
   }
 
   await job.update(payload);
@@ -261,29 +234,21 @@ const updateJob = async (
   return job;
 };
 
-const deleteJob = async (
-  jobId,
-  userId
-) => {
-  const job = await JobListing.findByPk(
-    jobId,
-    {
-      include: [
-        {
-          model: Company,
-        },
-      ],
-    }
-  );
+const deleteJob = async (jobId, userId) => {
+  const job = await JobListing.findByPk(jobId, {
+    include: [
+      {
+        model: Company,
+      },
+    ],
+  });
 
   if (!job) {
-    throw new Error("Job not found");
+    throw new NotFoundError("Job not found");
   }
 
   if (job.Company.createdBy !== userId) {
-    throw new Error(
-      "You are not allowed to delete this job"
-    );
+    throw new ForbiddenError("You are not allowed to delete this job");
   }
 
   await job.destroy();

@@ -28,13 +28,13 @@
  *    before job completion was acknowledged to Redis).
  */
 
-const { Worker, QueueEvents } = require('bullmq');
-const { createRedisConnection } = require('../config/redis');
-const { sendStatusEmail } = require('../utils/email.service');
-const notificationLog = require('../repository/notificationLog.repository');
-require('dotenv').config();
+const { Worker, QueueEvents } = require("bullmq");
+const { createRedisConnection } = require("../config/redis");
+const { sendStatusEmail } = require("../utils/email.service");
+const notificationLog = require("../repository/notificationLog.repository");
+require("dotenv").config();
 
-const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || 'application-status-emails';
+const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || "application-status-emails";
 
 function createEmailWorker() {
   const connection = createRedisConnection();
@@ -80,11 +80,11 @@ function createEmailWorker() {
   // instance processed). Use it for alerting/observability hooks.
   const queueEvents = new QueueEvents(QUEUE_NAME, { connection: createRedisConnection() });
 
-  queueEvents.on('completed', ({ jobId, returnvalue }) => {
+  queueEvents.on("completed", ({ jobId, returnvalue }) => {
     console.log(`[email-worker] job ${jobId} completed`, returnvalue);
   });
 
-  queueEvents.on('failed', ({ jobId, failedReason }) => {
+  queueEvents.on("failed", ({ jobId, failedReason }) => {
     // After all `attempts` are exhausted, this fires for the final failure.
     // This is your hook to page someone, write to a dead-letter table,
     // or fire a Slack webhook — the job data is still inspectable via
@@ -92,9 +92,9 @@ function createEmailWorker() {
     console.error(`[email-worker] job ${jobId} FAILED permanently:`, failedReason);
   });
 
-  worker.on('error', (err) => {
+  worker.on("error", (err) => {
     // Worker-level errors (e.g. Redis connection issues), not job failures.
-    console.error('[email-worker] worker error:', err);
+    console.error("[email-worker] worker error:", err);
   });
 
   return { worker, queueEvents, connection };

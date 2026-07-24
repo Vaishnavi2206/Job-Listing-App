@@ -13,9 +13,11 @@ const DashboardInner = () => {
   const isEmployer = user?.roleName === "EMPLOYER";
   const {
     applications,
-    showAppliedJobs, setShowAppliedJobs,
+    showAppliedJobs,
+    setShowAppliedJobs,
     loading,
-    message, error,
+    message,
+    error,
     handleLogout,
   } = useDashboard();
   return (
@@ -52,11 +54,7 @@ const DashboardInner = () => {
       {error && <p className="errorText">{error}</p>}
       {showAppliedJobs &&
         !isEmployer &&
-        (applications.length ? (
-          <AppliedJobsModal />
-        ) : (
-          <p>No applications yet.</p>
-        ))}
+        (applications.length ? <AppliedJobsModal /> : <p>No applications yet.</p>)}
       {loading ? (
         <p>Loading dashboard...</p>
       ) : isEmployer ? (

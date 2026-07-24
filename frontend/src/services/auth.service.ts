@@ -1,17 +1,8 @@
 import api from "../api/axios";
-import type {
-  LoginPayload,
-  SignupPayload,
-  User,
-} from "../types";
+import type { LoginPayload, SignupPayload, User } from "../types";
 
-export const signupUser = async (
-  payload: SignupPayload
-) => {
-  const response = await api.post(
-    "/auth/signup",
-    payload
-  );
+export const signupUser = async (payload: SignupPayload) => {
+  const response = await api.post("/auth/signup", payload);
 
   return response.data;
 };
@@ -19,10 +10,7 @@ export const signupUser = async (
 export const loginUser = async (
   payload: LoginPayload
 ): Promise<{ accessToken: string; user: User }> => {
-  const response = await api.post(
-    "/auth/login",
-    payload
-  );
+  const response = await api.post("/auth/login", payload);
 
   return response.data;
 };

@@ -8,10 +8,8 @@ import { useDashboard } from "../../hooks/useDashboard";
 
 const VirtualizedJobList = () => {
   "use no memo"; // useVirtualizer is incompatible with React Compiler memoization
-  const {
-    jobs, selectedJob, setSelectedJob,
-    isSearching, loadingMore, hasMore, loadMoreJobs,
-  } = useJobs();
+  const { jobs, selectedJob, setSelectedJob, isSearching, loadingMore, hasMore, loadMoreJobs } =
+    useJobs();
   const { appliedJobIds } = useDashboard();
   const parentRef = useRef(null);
   const loadTriggeredRef = useRef(false);
@@ -25,35 +23,28 @@ const VirtualizedJobList = () => {
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
-useEffect(() => {
-  if (loadingMore || !hasMore) return;
+  useEffect(() => {
+    if (loadingMore || !hasMore) return;
 
-  if (virtualItems.length === 0) return;
+    if (virtualItems.length === 0) return;
 
-  const lastVisible = virtualItems[virtualItems.length - 1].index;
+    const lastVisible = virtualItems[virtualItems.length - 1].index;
 
-  const shouldLoad = lastVisible >= jobs.length - 5;
+    const shouldLoad = lastVisible >= jobs.length - 5;
 
-  if (shouldLoad && !loadTriggeredRef.current) {
-    loadTriggeredRef.current = true;
-    loadMoreJobs();
-  }
+    if (shouldLoad && !loadTriggeredRef.current) {
+      loadTriggeredRef.current = true;
+      loadMoreJobs();
+    }
 
-  if (!shouldLoad) {
-    loadTriggeredRef.current = false;
-  }
-}, [
-  virtualItems,
-  jobs.length,
-  hasMore,
-  loadingMore,
-  loadMoreJobs,
-]);
-  
+    if (!shouldLoad) {
+      loadTriggeredRef.current = false;
+    }
+  }, [virtualItems, jobs.length, hasMore, loadingMore, loadMoreJobs]);
+
   if (isSearching) {
     return <JobDetailsSkeleton />;
   }
-
 
   return (
     <div

@@ -3,6 +3,12 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../users/user.model");
 const Role = require("../roles/role.model");
+const {
+  UnauthorizedError,
+  NotFoundError,
+  ConflictError,
+  BadRequestError,
+} = require("../../shared/utils/errors");
 
 const getAccessTokenSecret = () => {
   if (!process.env.JWT_SECRET) {
@@ -12,8 +18,7 @@ const getAccessTokenSecret = () => {
   return process.env.JWT_SECRET;
 };
 
-const getRefreshTokenSecret = () =>
-  process.env.JWT_REFRESH_SECRET || getAccessTokenSecret();
+const getRefreshTokenSecret = () => process.env.JWT_REFRESH_SECRET || getAccessTokenSecret();
 
 const buildTokenPayload = (user) => ({
   userId: user.id,
@@ -42,7 +47,7 @@ const createRefreshToken = (user) =>
     getRefreshTokenSecret(),
     {
       expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
-    },
+    }
   );
 
 const createTokenPair = (user) => ({
@@ -58,7 +63,7 @@ const signup = async (payload) => {
   });
 
   if (existingUser) {
-    throw new Error("Username already exists");
+    throw new ConflictError("Username already exists");
   }
 
   const role = await Role.findOne({
@@ -68,7 +73,7 @@ const signup = async (payload) => {
   });
 
   if (!role) {
-    throw new Error("Invalid role");
+    throw new BadRequestError("Invalid role");
   }
 
   const hashedPassword = await bcrypt.hash(payload.password, 10);
@@ -103,13 +108,13 @@ const login = async ({ username, password }) => {
   });
 
   if (!user) {
-    throw new Error("Invalid credentials");
+    throw new UnauthorizedError("Invalid credentials");
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    throw new Error("Invalid credentials");
+    throw new UnauthorizedError("Invalid credentials");
   }
 
   const tokens = createTokenPair(user);
@@ -122,7 +127,7 @@ const login = async ({ username, password }) => {
 
 const refreshSession = async (refreshToken) => {
   if (!refreshToken) {
-    throw new Error("Refresh token missing");
+    throw new UnauthorizedError("Refresh token missing");
   }
 
   let decoded;
@@ -130,7 +135,7 @@ const refreshSession = async (refreshToken) => {
   try {
     decoded = jwt.verify(refreshToken, getRefreshTokenSecret());
   } catch (error) {
-    throw new Error("Invalid refresh token");
+    throw new UnauthorizedError("Invalid refresh token");
   }
 
   const user = await User.findByPk(decoded.userId, {
@@ -142,7 +147,7 @@ const refreshSession = async (refreshToken) => {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new NotFoundError("User not found");
   }
 
   const tokens = createTokenPair(user);

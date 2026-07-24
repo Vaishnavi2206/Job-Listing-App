@@ -37,24 +37,16 @@ const CandidateDashboard = () => {
                   <p>{selectedJob.Company?.name || "Company"}</p>
                 </div>
 
-                <strong>
-                  {appliedJobIds.has(selectedJob.id) ? "Applied" : "Open"}
-                </strong>
+                <strong>{appliedJobIds.has(selectedJob.id) ? "Applied" : "Open"}</strong>
               </div>
 
               <div className="jobMeta detailsMeta">
                 {selectedJob.location && (
-                  <span className="metaPill metaLocation">
-                    {selectedJob.location}
-                  </span>
+                  <span className="metaPill metaLocation">{selectedJob.location}</span>
                 )}
-                <span className="metaPill metaSalary">
-                  {formatSalary(selectedJob)}
-                </span>
+                <span className="metaPill metaSalary">{formatSalary(selectedJob)}</span>
                 {selectedJob.employmentType && (
-                  <span className="metaPill metaType">
-                    {selectedJob.employmentType}
-                  </span>
+                  <span className="metaPill metaType">{selectedJob.employmentType}</span>
                 )}
               </div>
 
@@ -84,10 +76,7 @@ const CandidateDashboard = () => {
                   disabled={appliedJobIds.has(selectedJob.id)}
                 />
 
-                <button
-                  type="submit"
-                  disabled={applying || appliedJobIds.has(selectedJob.id)}
-                >
+                <button type="submit" disabled={applying || appliedJobIds.has(selectedJob.id)}>
                   {appliedJobIds.has(selectedJob.id)
                     ? "Already Applied"
                     : applying

@@ -12,8 +12,7 @@ const createCompanySchema = z.object({
   category: z.string().optional(),
 });
 
-const updateCompanySchema =
-  createCompanySchema.partial();
+const updateCompanySchema = createCompanySchema.partial();
 
 module.exports = {
   createCompanySchema,

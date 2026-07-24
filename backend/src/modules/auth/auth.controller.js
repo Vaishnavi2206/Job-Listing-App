@@ -1,9 +1,6 @@
 const asyncHandler = require("../../shared/utils/asyncHandler");
 
-const {
-  signupSchema,
-  loginSchema,
-} = require("./auth.validation");
+const { signupSchema, loginSchema } = require("./auth.validation");
 
 const authService = require("./auth.service");
 
@@ -17,27 +14,15 @@ const getRefreshCookieBaseOptions = () => ({
 
 const getRefreshCookieOptions = () => ({
   ...getRefreshCookieBaseOptions(),
-  maxAge:
-    Number(process.env.REFRESH_COOKIE_MAX_AGE_DAYS || 7) *
-    24 *
-    60 *
-    60 *
-    1000,
+  maxAge: Number(process.env.REFRESH_COOKIE_MAX_AGE_DAYS || 7) * 24 * 60 * 60 * 1000,
 });
 
 const setRefreshTokenCookie = (res, refreshToken) => {
-  res.cookie(
-    REFRESH_TOKEN_COOKIE_NAME,
-    refreshToken,
-    getRefreshCookieOptions(),
-  );
+  res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, getRefreshCookieOptions());
 };
 
 const clearRefreshTokenCookie = (res) => {
-  res.clearCookie(
-    REFRESH_TOKEN_COOKIE_NAME,
-    getRefreshCookieBaseOptions(),
-  );
+  res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, getRefreshCookieBaseOptions());
   res.clearCookie("token");
 };
 
@@ -72,9 +57,7 @@ const refresh = asyncHandler(async (req, res) => {
   let result;
 
   try {
-    result = await authService.refreshSession(
-      req.cookies?.[REFRESH_TOKEN_COOKIE_NAME],
-    );
+    result = await authService.refreshSession(req.cookies?.[REFRESH_TOKEN_COOKIE_NAME]);
   } catch (error) {
     clearRefreshTokenCookie(res);
 

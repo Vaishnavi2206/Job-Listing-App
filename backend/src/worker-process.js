@@ -1,5 +1,5 @@
 // Load .env before any other require so env vars are set before module init
-require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+require("dotenv").config({ path: require("path").resolve(__dirname, "../../.env") });
 
 /**
  * Worker process entrypoint.
@@ -19,11 +19,11 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env'
  * and can cause duplicate sends if the recovery races with a real send).
  */
 
-const { createEmailWorker } = require('./workers/email.worker');
+const { createEmailWorker } = require("./workers/email.worker");
 
-console.log('[worker-process] starting email worker...');
+console.log("[worker-process] starting email worker...");
 const { worker, queueEvents, connection } = createEmailWorker();
-console.log('[worker-process] email worker started, concurrency =', worker.opts.concurrency);
+console.log("[worker-process] email worker started, concurrency =", worker.opts.concurrency);
 
 async function shutdown(signal) {
   console.log(`[worker-process] received ${signal}, shutting down gracefully...`);
@@ -31,19 +31,19 @@ async function shutdown(signal) {
     await worker.close(); // waits for active jobs to finish
     await queueEvents.close();
     await connection.quit();
-    console.log('[worker-process] shutdown complete');
+    console.log("[worker-process] shutdown complete");
     process.exit(0);
   } catch (err) {
-    console.error('[worker-process] error during shutdown:', err);
+    console.error("[worker-process] error during shutdown:", err);
     process.exit(1);
   }
 }
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
 
 // Catch anything that slips through so the process doesn't die silently
 // and leave a job stuck "active" in Redis.
-process.on('unhandledRejection', (reason) => {
-  console.error('[worker-process] unhandled rejection:', reason);
+process.on("unhandledRejection", (reason) => {
+  console.error("[worker-process] unhandled rejection:", reason);
 });

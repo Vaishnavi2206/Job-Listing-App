@@ -41,6 +41,8 @@ export const JobsProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    // reloadJobs is async — setState calls happen after await, not synchronously
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     reloadJobs();
   }, [reloadJobs]);
 
@@ -85,10 +87,16 @@ export const JobsProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <JobsContext.Provider
       value={{
-        jobs, selectedJob, setSelectedJob,
-        searchTerm, setSearchTerm,
-        isSearching, loadingMore, hasMore,
-        loadMoreJobs, reloadJobs,
+        jobs,
+        selectedJob,
+        setSelectedJob,
+        searchTerm,
+        setSearchTerm,
+        isSearching,
+        loadingMore,
+        hasMore,
+        loadMoreJobs,
+        reloadJobs,
       }}
     >
       {children}

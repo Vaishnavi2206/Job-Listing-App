@@ -9,10 +9,7 @@ import {
 } from "react";
 
 import type { User } from "../types";
-import {
-  logoutUser,
-  refreshUserSession,
-} from "../services/auth.service";
+import { logoutUser, refreshUserSession } from "../services/auth.service";
 import {
   clearSessionActivity,
   getRemainingIdleTime,
@@ -31,26 +28,17 @@ type AuthContextValue = {
   logout: () => Promise<void>;
 };
 
-const AuthContext =
-  createContext<AuthContextValue | null>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const AuthProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem("user");
 
-    return storedUser
-      ? (JSON.parse(storedUser) as User)
-      : null;
+    return storedUser ? (JSON.parse(storedUser) as User) : null;
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+  const isAuthenticated = !!token;
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const tokenRef = useRef(token);
 
@@ -79,13 +67,12 @@ export const AuthProvider = ({
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
-      setIsAuthenticated(true);
     } else {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       clearSessionActivity();
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUser(null);
-      setIsAuthenticated(false);
     }
   }, [token]);
 
@@ -134,24 +121,12 @@ export const AuthProvider = ({
       setToken(null);
     };
 
-    window.addEventListener(
-      "auth:session-refreshed",
-      handleSessionRefreshed,
-    );
-    window.addEventListener(
-      "auth:session-expired",
-      handleSessionExpired,
-    );
+    window.addEventListener("auth:session-refreshed", handleSessionRefreshed);
+    window.addEventListener("auth:session-expired", handleSessionExpired);
 
     return () => {
-      window.removeEventListener(
-        "auth:session-refreshed",
-        handleSessionRefreshed,
-      );
-      window.removeEventListener(
-        "auth:session-expired",
-        handleSessionExpired,
-      );
+      window.removeEventListener("auth:session-refreshed", handleSessionRefreshed);
+      window.removeEventListener("auth:session-expired", handleSessionExpired);
     };
   }, []);
 
@@ -189,14 +164,7 @@ export const AuthProvider = ({
       scheduleIdleLogout();
     };
 
-    const activityEvents = [
-      "click",
-      "keydown",
-      "mousemove",
-      "scroll",
-      "touchstart",
-      "focus",
-    ];
+    const activityEvents = ["click", "keydown", "mousemove", "scroll", "touchstart", "focus"];
 
     activityEvents.forEach((eventName) => {
       window.addEventListener(eventName, handleActivity, {
@@ -224,14 +192,7 @@ export const AuthProvider = ({
       refreshSession,
       logout,
     }),
-    [
-      token,
-      user,
-      isAuthenticated,
-      isAuthLoading,
-      refreshSession,
-      logout,
-    ],
+    [token, user, isAuthenticated, isAuthLoading, refreshSession, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,12 +1,7 @@
 import "./JobCard.css";
 import { formatSalary } from "../../utils/dashboard.utils";
 
-const JobCard = ({
-  job,
-  isSelected,
-  isApplied,
-  setSelectedJob,
-}) => {
+const JobCard = ({ job, isSelected, isApplied, setSelectedJob }) => {
   return (
     <button
       className={`candidateJobItem ${isSelected ? "active" : ""}`}
@@ -23,13 +18,9 @@ const JobCard = ({
       </p>
 
       <div className="jobMeta">
-        {job.location && (
-          <span className="metaPill metaLocation">{job.location}</span>
-        )}
+        {job.location && <span className="metaPill metaLocation">{job.location}</span>}
         <span className="metaPill metaSalary">{formatSalary(job)}</span>
-        {job.employmentType && (
-          <span className="metaPill metaType">{job.employmentType}</span>
-        )}
+        {job.employmentType && <span className="metaPill metaType">{job.employmentType}</span>}
       </div>
 
       {isApplied && <strong className="appliedBadge">Applied</strong>}

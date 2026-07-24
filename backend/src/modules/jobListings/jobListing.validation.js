@@ -16,8 +16,7 @@ const createJobSchema = z.object({
   companyId: z.string().uuid(),
 });
 
-const updateJobSchema =
-  createJobSchema.partial();
+const updateJobSchema = createJobSchema.partial();
 
 module.exports = {
   createJobSchema,

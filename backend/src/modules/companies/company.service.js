@@ -1,4 +1,5 @@
 const Company = require("./company.model");
+const { NotFoundError, ForbiddenError } = require("../../shared/utils/errors");
 
 const createCompany = async (payload, userId) => {
   const company = await Company.create({
@@ -17,15 +18,11 @@ const getCompanyById = async (id) => {
   return await Company.findByPk(id);
 };
 
-const updateCompany = async (
-  companyId,
-  payload,
-  userId
-) => {
+const updateCompany = async (companyId, payload, userId) => {
   const company = await Company.findByPk(companyId);
 
   if (!company) {
-    throw new Error("Company not found");
+    throw new NotFoundError("Company not found");
   }
 
   /*
@@ -33,9 +30,7 @@ const updateCompany = async (
   */
 
   if (company.createdBy !== userId) {
-    throw new Error(
-      "You are not allowed to update this company"
-    );
+    throw new ForbiddenError("You are not allowed to update this company");
   }
 
   await company.update(payload);
@@ -43,20 +38,15 @@ const updateCompany = async (
   return company;
 };
 
-const deleteCompany = async (
-  companyId,
-  userId
-) => {
+const deleteCompany = async (companyId, userId) => {
   const company = await Company.findByPk(companyId);
 
   if (!company) {
-    throw new Error("Company not found");
+    throw new NotFoundError("Company not found");
   }
 
   if (company.createdBy !== userId) {
-    throw new Error(
-      "You are not allowed to delete this company"
-    );
+    throw new ForbiddenError("You are not allowed to delete this company");
   }
 
   await company.destroy();

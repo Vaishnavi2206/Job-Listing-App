@@ -13,7 +13,11 @@
     "dev:worker": "nodemon src/worker-process.js",
     "dashboard": "node src/dashboard/bull-board.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed:roles": "node database/seeders/role.seed.js"
+    "seed:roles": "node database/seeders/role.seed.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@bull-board/api": "^8.1.2",
@@ -33,6 +37,10 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.6"
   }
 }

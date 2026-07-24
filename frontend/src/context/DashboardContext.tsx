@@ -14,14 +14,11 @@ import {
 } from "../services/applications.service";
 
 const getErrorMessage = (requestError: unknown, fallback: string) => {
-  const response = (
-    requestError as { response?: { data?: { message?: string } } }
-  ).response;
+  const response = (requestError as { response?: { data?: { message?: string } } }).response;
   return response?.data?.message || fallback;
 };
 
-const formatStatus = (status: string) =>
-  status.charAt(0).toUpperCase() + status.slice(1);
+const formatStatus = (status: string) => status.charAt(0).toUpperCase() + status.slice(1);
 
 export interface DashboardContextValue {
   companies: Company[];
@@ -67,12 +64,12 @@ export const DashboardProvider = ({ children }: { children: React.ReactNode }) =
 
   const myCompanies = useMemo(
     () => companies.filter((c) => c.createdBy === user?.id),
-    [companies, user?.id],
+    [companies, user?.id]
   );
 
   const appliedJobIds = useMemo(
     () => new Set(applications.map((a) => a.jobListingId)),
-    [applications],
+    [applications]
   );
 
   const loadCompaniesAndApplications = useCallback(async () => {
@@ -167,14 +164,25 @@ export const DashboardProvider = ({ children }: { children: React.ReactNode }) =
   return (
     <DashboardContext.Provider
       value={{
-        companies, myCompanies,
-        applications, appliedJobIds,
-        loading, error, message,
-        showAppliedJobs, setShowAppliedJobs,
-        applying, updatingApplicationId,
-        companyForm, jobForm, applicationForm,
-        handleCreateCompany, handleCreateJob, handleApply,
-        handleUpdateApplicationStatus, handleLogout,
+        companies,
+        myCompanies,
+        applications,
+        appliedJobIds,
+        loading,
+        error,
+        message,
+        showAppliedJobs,
+        setShowAppliedJobs,
+        applying,
+        updatingApplicationId,
+        companyForm,
+        jobForm,
+        applicationForm,
+        handleCreateCompany,
+        handleCreateJob,
+        handleApply,
+        handleUpdateApplicationStatus,
+        handleLogout,
       }}
     >
       {children}

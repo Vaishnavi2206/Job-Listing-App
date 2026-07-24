@@ -1,0 +1,28 @@
+{
+  "name": "job-listing-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^13.3.0",
+    "prettier": "^3.9.6"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx}": [
+      "./frontend/node_modules/.bin/eslint --fix --config ./frontend/eslint.config.js",
+      "prettier --write"
+    ],
+    "backend/src/**/*.js": [
+      "./backend/node_modules/.bin/eslint --fix --config ./backend/eslint.config.js",
+      "prettier --write"
+    ],
+    "**/*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
+  }
+}

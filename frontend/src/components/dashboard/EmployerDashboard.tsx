@@ -9,15 +9,19 @@ import {
 
 const EmployerDashboard = () => {
   const {
-    companyForm, jobForm,
-    myCompanies, applications,
-    handleCreateCompany, handleCreateJob,
-    updatingApplicationId, handleUpdateApplicationStatus,
+    companyForm,
+    jobForm,
+    myCompanies,
+    applications,
+    handleCreateCompany,
+    handleCreateJob,
+    updatingApplicationId,
+    handleUpdateApplicationStatus,
   } = useDashboard();
   const { jobs, reloadJobs } = useJobs();
   const myJobs = useMemo(
     () => jobs.filter((job) => myCompanies.some((c) => c.id === job.companyId)),
-    [jobs, myCompanies],
+    [jobs, myCompanies]
   );
 
   const onCreateJobSubmit = jobForm.handleSubmit(async (data) => {
@@ -43,10 +47,7 @@ const EmployerDashboard = () => {
               })}
             />
 
-            <textarea
-              placeholder="Company description"
-              {...companyForm.register("description")}
-            />
+            <textarea placeholder="Company description" {...companyForm.register("description")} />
 
             <input
               type="text"
@@ -54,17 +55,9 @@ const EmployerDashboard = () => {
               {...companyForm.register("employeeSize")}
             />
 
-            <input
-              type="text"
-              placeholder="Location"
-              {...companyForm.register("location")}
-            />
+            <input type="text" placeholder="Location" {...companyForm.register("location")} />
 
-            <input
-              type="text"
-              placeholder="Category"
-              {...companyForm.register("category")}
-            />
+            <input type="text" placeholder="Category" {...companyForm.register("category")} />
 
             <button type="submit">Create Company</button>
           </form>
@@ -103,23 +96,11 @@ const EmployerDashboard = () => {
               })}
             />
 
-            <input
-              type="text"
-              placeholder="Location"
-              {...jobForm.register("location")}
-            />
+            <input type="text" placeholder="Location" {...jobForm.register("location")} />
 
-            <input
-              type="number"
-              placeholder="Minimum salary"
-              {...jobForm.register("salaryMin")}
-            />
+            <input type="number" placeholder="Minimum salary" {...jobForm.register("salaryMin")} />
 
-            <input
-              type="number"
-              placeholder="Maximum salary"
-              {...jobForm.register("salaryMax")}
-            />
+            <input type="number" placeholder="Maximum salary" {...jobForm.register("salaryMax")} />
 
             <select {...jobForm.register("employmentType")}>
               <option value="">Employment type</option>
@@ -148,18 +129,12 @@ const EmployerDashboard = () => {
               </p>
               <div className="jobMeta">
                 {company.location && (
-                  <span className="metaPill metaLocation">
-                    {company.location}
-                  </span>
+                  <span className="metaPill metaLocation">{company.location}</span>
                 )}
                 {company.employeeSize && (
-                  <span className="metaPill metaSalary">
-                    {company.employeeSize}
-                  </span>
+                  <span className="metaPill metaSalary">{company.employeeSize}</span>
                 )}
-                {company.category && (
-                  <span className="metaPill metaType">{company.category}</span>
-                )}
+                {company.category && <span className="metaPill metaType">{company.category}</span>}
               </div>
             </div>
           ))}
@@ -177,14 +152,10 @@ const EmployerDashboard = () => {
                 {job.description}
               </p>
               <div className="jobMeta">
-                {job.location && (
-                  <span className="metaPill metaLocation">{job.location}</span>
-                )}
+                {job.location && <span className="metaPill metaLocation">{job.location}</span>}
                 <span className="metaPill metaSalary">{formatSalary(job)}</span>
                 {job.employmentType && (
-                  <span className="metaPill metaType">
-                    {job.employmentType}
-                  </span>
+                  <span className="metaPill metaType">{job.employmentType}</span>
                 )}
               </div>
               <div className="companyName">{job.Company?.name}</div>
@@ -200,9 +171,7 @@ const EmployerDashboard = () => {
           <div className="applicationsQueue">
             {applications.map((application) => {
               const job = application.JobListing;
-              const company = myCompanies.find(
-                (item) => item.id === application.companyId,
-              );
+              const company = myCompanies.find((item) => item.id === application.companyId);
               const status = application.status.toLowerCase();
               const nextStatuses = validApplicationTransitions[status] || [];
               const candidateName = application.User
@@ -220,9 +189,7 @@ const EmployerDashboard = () => {
                       <small>{company?.name || "Company"}</small>
                     </div>
 
-                    <span className={`statusBadge status-${status}`}>
-                      {formatStatus(status)}
-                    </span>
+                    <span className={`statusBadge status-${status}`}>{formatStatus(status)}</span>
                   </div>
 
                   {application.resumeUrl && (
@@ -237,10 +204,7 @@ const EmployerDashboard = () => {
                   )}
 
                   {application.coverLetter && (
-                    <p
-                      className="cardDescription"
-                      title={application.coverLetter}
-                    >
+                    <p className="cardDescription" title={application.coverLetter}>
                       {application.coverLetter}
                     </p>
                   )}
@@ -250,12 +214,7 @@ const EmployerDashboard = () => {
                       nextStatuses.map((nextStatus) => (
                         <button
                           key={nextStatus}
-                          onClick={() =>
-                            handleUpdateApplicationStatus(
-                              application.id,
-                              nextStatus,
-                            )
-                          }
+                          onClick={() => handleUpdateApplicationStatus(application.id, nextStatus)}
                           disabled={updatingApplicationId === application.id}
                         >
                           Move to {formatStatus(nextStatus)}

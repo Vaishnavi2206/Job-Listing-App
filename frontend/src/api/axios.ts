@@ -1,8 +1,5 @@
 import axios from "axios";
-import {
-  clearSessionActivity,
-  isSessionIdleExpired,
-} from "../utils/authSession";
+import { clearSessionActivity, isSessionIdleExpired } from "../utils/authSession";
 
 const api = axios.create({
   baseURL: "/api",
@@ -58,9 +55,7 @@ api.interceptors.response.use(
     originalRequest._retry = true;
 
     try {
-      const response = await refreshClient.post(
-        "/auth/refresh"
-      );
+      const response = await refreshClient.post("/auth/refresh");
       const { accessToken, user } = response.data;
 
       localStorage.setItem("token", accessToken);
@@ -68,7 +63,7 @@ api.interceptors.response.use(
       window.dispatchEvent(
         new CustomEvent("auth:session-refreshed", {
           detail: { accessToken, user },
-        }),
+        })
       );
       originalRequest.headers = originalRequest.headers ?? {};
       originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -82,7 +77,7 @@ api.interceptors.response.use(
 
       return Promise.reject(refreshError);
     }
-  },
+  }
 );
 
 export default api;

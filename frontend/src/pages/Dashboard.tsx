@@ -7,6 +7,7 @@ import { DashboardProvider } from "../context/DashboardContext";
 import { JobsProvider } from "../context/JobsContext";
 import { useDashboard } from "../hooks/useDashboard";
 import useAuth from "../hooks/useAuth";
+import { Button, Alert, Loader } from "../components/ui";
 
 const DashboardInner = () => {
   const { user } = useAuth();
@@ -20,48 +21,125 @@ const DashboardInner = () => {
     error,
     handleLogout,
   } = useDashboard();
+
+  const initials = `${user?.firstName?.[0] ?? ""}${user?.lastName?.[0] ?? ""}`.toUpperCase();
+
   return (
-    <div className="dashboardPage">
-      <header className="dashboardHeader">
-        <div>
-          <p className="eyebrow">JOB HUNT</p>
-          <h1>Welcome, {user?.firstName || "there"}</h1>
-          <p>
-            {isEmployer
-              ? "Create companies and publish jobs from one workspace."
-              : "Your candidate dashboard is ready."}
-          </p>
+    <div className="db-layout">
+      {/* ── Sidebar ───────────────────────────────────────────── */}
+      <aside className="db-sidebar">
+        <div className="db-sidebar__logo">
+          <div className="db-sidebar__logo-mark">JB</div>
+          <span className="db-sidebar__logo-name">JobBoard</span>
         </div>
 
-        <div className="dashboardActions">
-          {!isEmployer && (
-            <button
-              className="appliedJobsButton"
-              onClick={() => setShowAppliedJobs((isVisible) => !isVisible)}
-              aria-label="Show applied jobs"
-            >
-              <span aria-hidden="true">A</span>
-              <strong>{applications.length}</strong>
-            </button>
+        <nav className="db-nav" aria-label="Dashboard navigation">
+          <p className="db-nav__label">{isEmployer ? "Employer" : "Candidate"}</p>
+
+          {isEmployer ? (
+            <>
+              <a className="db-nav__item db-nav__item--active" href="#overview">
+                <span className="db-nav__icon" aria-hidden="true">
+                  ◈
+                </span>
+                Overview
+              </a>
+              <a className="db-nav__item" href="#companies">
+                <span className="db-nav__icon" aria-hidden="true">
+                  ⊞
+                </span>
+                Companies
+              </a>
+              <a className="db-nav__item" href="#jobs">
+                <span className="db-nav__icon" aria-hidden="true">
+                  ◇
+                </span>
+                Jobs
+              </a>
+              <a className="db-nav__item" href="#applications">
+                <span className="db-nav__icon" aria-hidden="true">
+                  ☰
+                </span>
+                Applications
+              </a>
+            </>
+          ) : (
+            <div className="db-nav__item db-nav__item--active">
+              <span className="db-nav__icon" aria-hidden="true">
+                ⊞
+              </span>
+              Browse Jobs
+            </div>
+          )}
+        </nav>
+
+        <div className="db-sidebar__footer">
+          <div className="db-sidebar__user">
+            <div className="db-sidebar__avatar">{initials}</div>
+            <div className="db-sidebar__user-info">
+              <div className="db-sidebar__user-name">
+                {user?.firstName} {user?.lastName}
+              </div>
+              <div className="db-sidebar__user-role">{isEmployer ? "Employer" : "Candidate"}</div>
+            </div>
+          </div>
+          <Button variant="ghost" size="sm" fullWidth onClick={handleLogout}>
+            Sign out
+          </Button>
+        </div>
+      </aside>
+
+      {/* ── Main ──────────────────────────────────────────────── */}
+      <main className="db-main">
+        {/* Topbar */}
+        <div className="db-topbar">
+          <div className="db-topbar__left">
+            <h1 className="db-topbar__title">
+              Welcome back, <span>{user?.firstName || "there"}</span>
+            </h1>
+            <p className="db-topbar__subtitle">
+              {isEmployer
+                ? "Manage your companies, jobs, and applications."
+                : "Find your next opportunity and track your applications."}
+            </p>
+          </div>
+          <div className="db-topbar__right">
+            {!isEmployer && (
+              <Button variant="secondary" size="sm" onClick={() => setShowAppliedJobs((v) => !v)}>
+                My Applications ({applications.length})
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="db-content">
+          {message && (
+            <Alert key={message} variant="success" message={message} compact className="db-alert" />
+          )}
+          {error && (
+            <Alert key={error} variant="danger" message={error} compact className="db-alert" />
           )}
 
-          <button onClick={handleLogout}>Logout</button>
+          {showAppliedJobs &&
+            !isEmployer &&
+            (applications.length ? (
+              <AppliedJobsModal />
+            ) : (
+              <p className="db-empty-inline">No applications yet.</p>
+            ))}
+
+          {loading ? (
+            <div className="db-loader-wrap">
+              <Loader label="Loading your dashboard…" />
+            </div>
+          ) : isEmployer ? (
+            <EmployerDashboard />
+          ) : (
+            <CandidateDashboard />
+          )}
         </div>
-      </header>
-
-      {message && <p className="successText">{message}</p>}
-
-      {error && <p className="errorText">{error}</p>}
-      {showAppliedJobs &&
-        !isEmployer &&
-        (applications.length ? <AppliedJobsModal /> : <p>No applications yet.</p>)}
-      {loading ? (
-        <p>Loading dashboard...</p>
-      ) : isEmployer ? (
-        <EmployerDashboard />
-      ) : (
-        <CandidateDashboard />
-      )}
+      </main>
     </div>
   );
 };

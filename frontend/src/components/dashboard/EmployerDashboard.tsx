@@ -6,6 +6,8 @@ import {
   formatStatus,
   validApplicationTransitions,
 } from "../../utils/dashboard.utils";
+import { Button, Input, Select, Textarea, FormField, Badge, EmptyState } from "../ui";
+import { statusToBadgeVariant } from "../ui/Badge";
 
 const EmployerDashboard = () => {
   const {
@@ -19,10 +21,13 @@ const EmployerDashboard = () => {
     handleUpdateApplicationStatus,
   } = useDashboard();
   const { jobs, reloadJobs } = useJobs();
+
   const myJobs = useMemo(
     () => jobs.filter((job) => myCompanies.some((c) => c.id === job.companyId)),
     [jobs, myCompanies]
   );
+
+  const pendingCount = applications.filter((a) => a.status.toLowerCase() === "pending").length;
 
   const onCreateJobSubmit = jobForm.handleSubmit(async (data) => {
     try {
@@ -32,143 +37,274 @@ const EmployerDashboard = () => {
       // error already set in context
     }
   });
+
   return (
-    <div>
-      <section className="dashboardGrid">
-        <div className="dashboardCard">
-          <h2>Create Company</h2>
+    <div id="overview">
+      {/* ── Stats ─────────────────────────────────────────────── */}
+      <div className="db-stats">
+        <div className="db-stat-card">
+          <div className="db-stat-card__icon">🏢</div>
+          <div>
+            <div className="db-stat-card__value">{myCompanies.length}</div>
+            <div className="db-stat-card__label">Companies</div>
+          </div>
+        </div>
 
-          <form onSubmit={companyForm.handleSubmit(handleCreateCompany)}>
-            <input
-              type="text"
-              placeholder="Company name"
-              {...companyForm.register("name", {
-                required: true,
-              })}
-            />
+        <div className="db-stat-card">
+          <div className="db-stat-card__icon">💼</div>
+          <div>
+            <div className="db-stat-card__value">{myJobs.length}</div>
+            <div className="db-stat-card__label">Active Jobs</div>
+          </div>
+        </div>
 
-            <textarea placeholder="Company description" {...companyForm.register("description")} />
+        <div className="db-stat-card">
+          <div className="db-stat-card__icon">📋</div>
+          <div>
+            <div className="db-stat-card__value">{applications.length}</div>
+            <div className="db-stat-card__label">Applications</div>
+          </div>
+        </div>
 
-            <input
-              type="text"
-              placeholder="Employee size"
-              {...companyForm.register("employeeSize")}
-            />
+        <div className="db-stat-card">
+          <div className="db-stat-card__icon">⏳</div>
+          <div>
+            <div className="db-stat-card__value">{pendingCount}</div>
+            <div className="db-stat-card__label">Pending Review</div>
+          </div>
+        </div>
+      </div>
 
-            <input type="text" placeholder="Location" {...companyForm.register("location")} />
+      {/* ── Create Forms ──────────────────────────────────────── */}
+      <div className="db-forms-grid">
+        {/* Create Company */}
+        <div className="db-form-card">
+          <h2 className="db-form-card__title">Create Company</h2>
+          <form className="db-form" onSubmit={companyForm.handleSubmit(handleCreateCompany)}>
+            <FormField label="Company name" required htmlFor="co-name">
+              <Input
+                id="co-name"
+                placeholder="Acme Corp"
+                {...companyForm.register("name", { required: true })}
+              />
+            </FormField>
 
-            <input type="text" placeholder="Category" {...companyForm.register("category")} />
+            <FormField label="Description" htmlFor="co-desc">
+              <Textarea
+                id="co-desc"
+                placeholder="What does your company do?"
+                {...companyForm.register("description")}
+              />
+            </FormField>
 
-            <button type="submit">Create Company</button>
+            <FormField label="Team size" htmlFor="co-size">
+              <Input
+                id="co-size"
+                placeholder="e.g. 50–200"
+                {...companyForm.register("employeeSize")}
+              />
+            </FormField>
+
+            <FormField label="Location" htmlFor="co-location">
+              <Input
+                id="co-location"
+                placeholder="City, Country"
+                {...companyForm.register("location")}
+              />
+            </FormField>
+
+            <FormField label="Category" htmlFor="co-category">
+              <Input
+                id="co-category"
+                placeholder="e.g. SaaS, FinTech"
+                {...companyForm.register("category")}
+              />
+            </FormField>
+
+            <Button type="submit" variant="primary" fullWidth>
+              Create Company
+            </Button>
           </form>
         </div>
 
-        <div className="dashboardCard">
-          <h2>Create Job</h2>
+        {/* Create Job */}
+        <div className="db-form-card">
+          <h2 className="db-form-card__title">Create Job</h2>
+          <form className="db-form" onSubmit={onCreateJobSubmit}>
+            <FormField label="Company" required htmlFor="job-company">
+              <Select
+                id="job-company"
+                placeholder="Select company"
+                options={myCompanies.map((c) => ({ value: c.id, label: c.name }))}
+                {...jobForm.register("companyId", { required: true })}
+              />
+            </FormField>
 
-          <form onSubmit={onCreateJobSubmit}>
-            <select
-              {...jobForm.register("companyId", {
-                required: true,
-              })}
-            >
-              <option value="">Select company</option>
+            <FormField label="Job title" required htmlFor="job-title">
+              <Input
+                id="job-title"
+                placeholder="e.g. Senior Engineer"
+                {...jobForm.register("title", { required: true })}
+              />
+            </FormField>
 
-              {myCompanies.map((company) => (
-                <option key={company.id} value={company.id}>
-                  {company.name}
-                </option>
-              ))}
-            </select>
+            <FormField label="Description" required htmlFor="job-desc">
+              <Textarea
+                id="job-desc"
+                placeholder="Describe the role and requirements…"
+                {...jobForm.register("description", { required: true })}
+              />
+            </FormField>
 
-            <input
-              type="text"
-              placeholder="Job title"
-              {...jobForm.register("title", {
-                required: true,
-              })}
-            />
+            <FormField label="Location" htmlFor="job-location">
+              <Input
+                id="job-location"
+                placeholder="Remote / City, Country"
+                {...jobForm.register("location")}
+              />
+            </FormField>
 
-            <textarea
-              placeholder="Job description"
-              {...jobForm.register("description", {
-                required: true,
-              })}
-            />
+            <div className="db-form-row">
+              <FormField label="Min salary" htmlFor="job-min">
+                <Input
+                  id="job-min"
+                  type="number"
+                  placeholder="60,000"
+                  {...jobForm.register("salaryMin")}
+                />
+              </FormField>
+              <FormField label="Max salary" htmlFor="job-max">
+                <Input
+                  id="job-max"
+                  type="number"
+                  placeholder="100,000"
+                  {...jobForm.register("salaryMax")}
+                />
+              </FormField>
+            </div>
 
-            <input type="text" placeholder="Location" {...jobForm.register("location")} />
+            <FormField label="Employment type" htmlFor="job-type">
+              <Select
+                id="job-type"
+                placeholder="Select type"
+                options={[
+                  { value: "Full Time", label: "Full Time" },
+                  { value: "Part Time", label: "Part Time" },
+                  { value: "Contract", label: "Contract" },
+                  { value: "Internship", label: "Internship" },
+                ]}
+                {...jobForm.register("employmentType")}
+              />
+            </FormField>
 
-            <input type="number" placeholder="Minimum salary" {...jobForm.register("salaryMin")} />
-
-            <input type="number" placeholder="Maximum salary" {...jobForm.register("salaryMax")} />
-
-            <select {...jobForm.register("employmentType")}>
-              <option value="">Employment type</option>
-              <option value="Full Time">Full Time</option>
-              <option value="Part Time">Part Time</option>
-              <option value="Contract">Contract</option>
-              <option value="Internship">Internship</option>
-            </select>
-
-            <button type="submit" disabled={!myCompanies.length}>
+            <Button type="submit" variant="primary" fullWidth disabled={!myCompanies.length}>
               Create Job
-            </button>
+            </Button>
           </form>
         </div>
-      </section>
+      </div>
 
-      <section className="dashboardSection">
-        <h2>Your Companies</h2>
-
-        <div className="jobsGrid listingGrid">
-          {myCompanies.map((company) => (
-            <div className="jobCard" key={company.id}>
-              <h3>{company.name}</h3>
-              <p className="cardDescription" title={company.description}>
-                {company.description}
-              </p>
-              <div className="jobMeta">
-                {company.location && (
-                  <span className="metaPill metaLocation">{company.location}</span>
-                )}
-                {company.employeeSize && (
-                  <span className="metaPill metaSalary">{company.employeeSize}</span>
-                )}
-                {company.category && <span className="metaPill metaType">{company.category}</span>}
-              </div>
-            </div>
-          ))}
+      {/* ── Companies ─────────────────────────────────────────── */}
+      <section className="db-section" id="companies">
+        <div className="db-section__header">
+          <h2 className="db-section__title">Your Companies</h2>
+          <Badge variant="neutral">{myCompanies.length}</Badge>
         </div>
-      </section>
 
-      <section className="dashboardSection">
-        <h2>Your Jobs</h2>
+        {myCompanies.length ? (
+          <div className="db-cards-grid">
+            {myCompanies.map((company) => (
+              <div className="db-entity-card" key={company.id}>
+                <div className="db-entity-card__header">
+                  <div className="db-entity-card__header-left">
+                    <div className="db-entity-card__avatar">{company.name[0].toUpperCase()}</div>
+                    <div>
+                      <h3 className="db-entity-card__name">{company.name}</h3>
+                      {company.category && (
+                        <span className="db-entity-card__sub">{company.category}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
 
-        <div className="jobsGrid listingGrid">
-          {myJobs.map((job) => (
-            <div className="jobCard" key={job.id}>
-              <h3>{job.title}</h3>
-              <p className="cardDescription" title={job.description}>
-                {job.description}
-              </p>
-              <div className="jobMeta">
-                {job.location && <span className="metaPill metaLocation">{job.location}</span>}
-                <span className="metaPill metaSalary">{formatSalary(job)}</span>
-                {job.employmentType && (
-                  <span className="metaPill metaType">{job.employmentType}</span>
+                {company.description && (
+                  <p className="db-entity-card__description" title={company.description}>
+                    {company.description}
+                  </p>
                 )}
+
+                <div className="db-entity-card__meta">
+                  {company.location && (
+                    <span className="metaPill metaLocation">{company.location}</span>
+                  )}
+                  {company.employeeSize && (
+                    <span className="metaPill metaSalary">{company.employeeSize}</span>
+                  )}
+                </div>
               </div>
-              <div className="companyName">{job.Company?.name}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="No companies yet"
+            message="Create your first company above to start posting jobs."
+            compact
+          />
+        )}
       </section>
 
-      <section className="dashboardSection">
-        <h2>Applications</h2>
+      {/* ── Jobs ──────────────────────────────────────────────── */}
+      <section className="db-section" id="jobs">
+        <div className="db-section__header">
+          <h2 className="db-section__title">Your Jobs</h2>
+          <Badge variant="neutral">{myJobs.length}</Badge>
+        </div>
+
+        {myJobs.length ? (
+          <div className="db-cards-grid">
+            {myJobs.map((job) => (
+              <div className="db-entity-card" key={job.id}>
+                <div className="db-entity-card__header">
+                  <div className="db-entity-card__header-left">
+                    <div>
+                      <h3 className="db-entity-card__name">{job.title}</h3>
+                      <span className="db-entity-card__sub">{job.Company?.name}</span>
+                    </div>
+                  </div>
+                  {job.employmentType && <Badge variant="blue">{job.employmentType}</Badge>}
+                </div>
+
+                {job.description && (
+                  <p className="db-entity-card__description" title={job.description}>
+                    {job.description}
+                  </p>
+                )}
+
+                <div className="db-entity-card__meta">
+                  {job.location && <span className="metaPill metaLocation">{job.location}</span>}
+                  <span className="metaPill metaSalary">{formatSalary(job)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="No jobs posted yet"
+            message="Create a company first, then post your first job listing."
+            compact
+          />
+        )}
+      </section>
+
+      {/* ── Applications ──────────────────────────────────────── */}
+      <section className="db-section" id="applications">
+        <div className="db-section__header">
+          <h2 className="db-section__title">Applications</h2>
+          <Badge variant={pendingCount > 0 ? "orange" : "neutral"}>{applications.length}</Badge>
+        </div>
 
         {applications.length ? (
-          <div className="applicationsQueue">
+          <div className="db-apps-grid">
             {applications.map((application) => {
               const job = application.JobListing;
               const company = myCompanies.find((item) => item.id === application.companyId);
@@ -179,46 +315,48 @@ const EmployerDashboard = () => {
                 : "Candidate";
 
               return (
-                <article className="applicationCard" key={application.id}>
-                  <div className="applicationTopline">
+                <article className="db-app-card" key={application.id}>
+                  <div className="db-app-card__header">
                     <div>
-                      <h3>{candidateName}</h3>
-                      <p>
+                      <h3 className="db-app-card__name">{candidateName}</h3>
+                      <p className="db-app-card__job">
                         Applied for <strong>{job?.title || "Job"}</strong>
                       </p>
-                      <small>{company?.name || "Company"}</small>
+                      <p className="db-app-card__company">{company?.name || "Company"}</p>
                     </div>
-
-                    <span className={`statusBadge status-${status}`}>{formatStatus(status)}</span>
+                    <Badge variant={statusToBadgeVariant(status)}>{formatStatus(status)}</Badge>
                   </div>
 
                   {application.resumeUrl && (
                     <a
-                      className="resumeLink"
+                      className="db-app-card__resume"
                       href={application.resumeUrl}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      View resume
+                      View Resume →
                     </a>
                   )}
 
                   {application.coverLetter && (
-                    <p className="cardDescription" title={application.coverLetter}>
+                    <p className="db-app-card__letter" title={application.coverLetter}>
                       {application.coverLetter}
                     </p>
                   )}
 
-                  <div className="applicationActions">
+                  <div className="db-app-card__actions">
                     {nextStatuses.length ? (
                       nextStatuses.map((nextStatus) => (
-                        <button
+                        <Button
                           key={nextStatus}
+                          variant="secondary"
+                          size="sm"
                           onClick={() => handleUpdateApplicationStatus(application.id, nextStatus)}
                           disabled={updatingApplicationId === application.id}
+                          loading={updatingApplicationId === application.id}
                         >
-                          Move to {formatStatus(nextStatus)}
-                        </button>
+                          {formatStatus(nextStatus)}
+                        </Button>
                       ))
                     ) : (
                       <span className="terminalStatus">Final status</span>
@@ -229,9 +367,11 @@ const EmployerDashboard = () => {
             })}
           </div>
         ) : (
-          <div className="dashboardCard">
-            <p>No applications yet.</p>
-          </div>
+          <EmptyState
+            title="No applications yet"
+            message="Applications will appear here once candidates apply to your jobs."
+            compact
+          />
         )}
       </section>
     </div>

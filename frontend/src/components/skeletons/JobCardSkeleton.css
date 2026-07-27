@@ -1,19 +1,19 @@
 .jobSkeleton {
-  background: white;
-  border-radius: 14px;
-  padding: 16px;
+  background: var(--color-surface-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-card-padding-sm);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .skeletonTitle,
 .skeletonCompany,
 .skeletonLocation,
 .skeletonTags span {
-  background: #e5e7eb;
-  border-radius: 6px;
-  animation: pulse 1.4s infinite;
+  background: var(--color-action-disabled-bg);
+  border-radius: var(--radius-sm);
+  animation: var(--animation-pulse);
 }
 
 .skeletonTitle {
@@ -33,7 +33,7 @@
 
 .skeletonTags {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .skeletonTags span {
@@ -41,16 +41,11 @@
   width: 80px;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 0.55;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.55;
-  }
+/* ── Skeleton Detail Block (JobDetailsSkeleton) ────────────── */
+/* Used in the detail pane when no job is selected             */
+.skeletonDetail {
+  height: 150px;
+  background: var(--color-action-disabled-bg);
+  border-radius: var(--radius-base);
+  margin-top: var(--space-5);
 }

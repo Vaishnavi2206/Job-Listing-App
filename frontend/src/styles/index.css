@@ -1,0 +1,23 @@
+/* ============================================================
+ * DESIGN SYSTEM — TOKEN BARREL
+ *
+ * Import this file ONCE, as the very first stylesheet, in main.tsx:
+ *
+ *   import "./styles/index.css";   // ← before any other CSS
+ *   import "./index.css";
+ *
+ * The import order here is intentional:
+ *   colors → typography → spacing → visual (shadows/radius/animation/z)
+ * Each subsequent file may reference tokens defined in earlier files.
+ * ============================================================ */
+
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/shadows.css";
+@import "./tokens/border-radius.css";
+@import "./tokens/animation.css";
+@import "./tokens/z-index.css";
+
+/* ── Reusable Component Styles ─────────────────────────────── */
+@import "./components/index.css";

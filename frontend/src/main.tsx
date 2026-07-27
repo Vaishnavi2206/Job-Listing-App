@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./styles/index.css"; // Design tokens — must be first
 import "./index.css";
 import App from "./App.tsx";
 

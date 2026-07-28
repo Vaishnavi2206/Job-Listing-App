@@ -1,0 +1,148 @@
+/* ============================================================
+ * TOOLTIP COMPONENT
+ *
+ * CSS-only tooltips using the data-tooltip attribute.
+ * Works on any element — no JS required for the default case.
+ * The React <Tooltip> component uses these classes.
+ *
+ * Usage:
+ *   <button data-tooltip="Save changes">Save</button>
+ *   <button data-tooltip="Delete" data-tooltip-placement="bottom">Delete</button>
+ *
+ * Accessibility: Add aria-describedby for screen readers when
+ * using the React <Tooltip> component.
+ * ============================================================ */
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+[data-tooltip] {
+  position: relative;
+}
+
+/* The tooltip bubble */
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  translate: -50% 0;
+  z-index: var(--z-tooltip);
+
+  /* Visual */
+  background: var(--color-primary-900);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  white-space: nowrap;
+  max-width: 220px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+
+  /* Hidden by default */
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--duration-fast) var(--easing-out),
+    transform var(--duration-fast) var(--easing-out);
+}
+
+/* The arrow */
+[data-tooltip]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  translate: -50% 0;
+  z-index: var(--z-tooltip);
+
+  border: 5px solid transparent;
+  border-top-color: var(--color-primary-900);
+
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--easing-out);
+}
+
+/* ── Show on hover / focus ─────────────────────────────────── */
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::before,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Placement Modifiers ───────────────────────────────────── */
+
+/* Bottom */
+[data-tooltip][data-tooltip-placement="bottom"]::before {
+  bottom: auto;
+  top: calc(100% + 8px);
+  transform: translateY(-4px);
+}
+
+[data-tooltip][data-tooltip-placement="bottom"]:hover::before,
+[data-tooltip][data-tooltip-placement="bottom"]:focus-visible::before {
+  transform: translateY(0);
+}
+
+[data-tooltip][data-tooltip-placement="bottom"]::after {
+  bottom: auto;
+  top: calc(100% + 3px);
+  border-top-color: transparent;
+  border-bottom-color: var(--color-primary-900);
+}
+
+/* Right */
+[data-tooltip][data-tooltip-placement="right"]::before {
+  bottom: auto;
+  top: 50%;
+  left: calc(100% + 8px);
+  translate: 0 -50%;
+  transform: translateX(-4px);
+}
+
+[data-tooltip][data-tooltip-placement="right"]:hover::before,
+[data-tooltip][data-tooltip-placement="right"]:focus-visible::before {
+  transform: translateX(0);
+}
+
+[data-tooltip][data-tooltip-placement="right"]::after {
+  bottom: auto;
+  top: 50%;
+  left: calc(100% + 3px);
+  translate: 0 -50%;
+  border-top-color: transparent;
+  border-right-color: var(--color-primary-900);
+}
+
+/* Left */
+[data-tooltip][data-tooltip-placement="left"]::before {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: calc(100% + 8px);
+  translate: 0 -50%;
+  transform: translateX(4px);
+}
+
+[data-tooltip][data-tooltip-placement="left"]:hover::before,
+[data-tooltip][data-tooltip-placement="left"]:focus-visible::before {
+  transform: translateX(0);
+}
+
+[data-tooltip][data-tooltip-placement="left"]::after {
+  bottom: auto;
+  top: 50%;
+  left: auto;
+  right: calc(100% + 3px);
+  translate: 0 -50%;
+  border-top-color: transparent;
+  border-left-color: var(--color-primary-900);
+}

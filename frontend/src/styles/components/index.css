@@ -1,0 +1,14 @@
+/* ============================================================
+ * COMPONENT STYLES BARREL
+ * Import this once from src/styles/index.css.
+ * All component CSS files are listed here in dependency order.
+ * ============================================================ */
+
+@import "./button.css";
+@import "./form.css";
+@import "./card.css";
+@import "./badge.css";
+@import "./alert.css";
+@import "./loader.css";
+@import "./empty-state.css";
+@import "./tooltip.css";

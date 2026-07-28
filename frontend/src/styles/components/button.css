@@ -1,0 +1,200 @@
+/* ============================================================
+ * BUTTON COMPONENT
+ *
+ * Usage:
+ *   <button class="btn btn--primary btn--md">Save</button>
+ *   <button class="btn btn--secondary btn--sm">Cancel</button>
+ *   <button class="btn btn--primary btn--md btn--loading">...</button>
+ *   <button class="btn btn--ghost btn--icon btn--sm" aria-label="Close">×</button>
+ * ============================================================ */
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
+  position: relative;
+
+  /* Tokens-based transitions */
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-normal) var(--easing-default),
+    transform var(--duration-normal) var(--easing-default),
+    opacity var(--duration-fast) var(--easing-default);
+
+  /* Accessible focus ring — visible only on keyboard nav */
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+}
+
+.btn:focus-visible {
+  outline-color: var(--color-blue-600);
+}
+
+.btn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+
+.btn--sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  min-height: 32px;
+}
+
+.btn--md {
+  padding: 10px var(--space-4);
+  font-size: var(--font-size-sm);
+  min-height: 40px;
+}
+
+.btn--lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  min-height: 48px;
+}
+
+/* ── Variants ──────────────────────────────────────────────── */
+
+/* Primary — dark background, white text */
+.btn--primary {
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-action-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Secondary — white card with border */
+.btn--secondary {
+  background: var(--color-surface-card);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  border-color: var(--color-primary-300);
+  background: var(--color-primary-50);
+}
+
+.btn--secondary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Ghost — transparent, subtle fill on hover */
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--color-primary-100);
+  color: var(--color-text-primary);
+}
+
+.btn--ghost:active:not(:disabled) {
+  background: var(--color-primary-200);
+}
+
+/* Danger — soft red, turns solid on hover */
+.btn--danger {
+  background: var(--color-red-50);
+  color: var(--color-red-700);
+  border-color: color-mix(in srgb, var(--color-red-700) 30%, transparent);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--color-red-700);
+  color: var(--color-text-inverse);
+  border-color: var(--color-red-700);
+}
+
+/* Success — soft green */
+.btn--success {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+  border-color: color-mix(in srgb, var(--color-green-700) 30%, transparent);
+}
+
+.btn--success:hover:not(:disabled) {
+  background: var(--color-green-700);
+  color: var(--color-text-inverse);
+  border-color: var(--color-green-700);
+}
+
+/* ── Icon-only (circular) ──────────────────────────────────── */
+
+.btn--icon {
+  padding: 0;
+  border-radius: var(--radius-circle);
+  flex-shrink: 0;
+}
+
+.btn--icon.btn--sm {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+}
+.btn--icon.btn--md {
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+}
+.btn--icon.btn--lg {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+}
+
+/* ── Full width ────────────────────────────────────────────── */
+
+.btn--full {
+  width: 100%;
+}
+
+/* ── Loading state ─────────────────────────────────────────── */
+/* The React Button component renders a <Spinner> inside when loading=true.
+   This class hides the text and disables interaction during loading.       */
+
+.btn--loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.btn--loading .btn__label {
+  opacity: 0;
+}
+
+.btn__spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

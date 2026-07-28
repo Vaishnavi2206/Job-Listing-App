@@ -1,0 +1,181 @@
+/* ============================================================
+ * BADGE & CHIP COMPONENTS
+ *
+ * Badge  — non-interactive status indicator (pill shape)
+ * Chip   — interactive tag, optionally dismissible
+ *
+ * Usage:
+ *   <span class="badge badge--green">Hired</span>
+ *   <span class="badge badge--orange badge--dot">Pending</span>
+ *
+ *   <span class="chip">
+ *     React
+ *     <button class="chip__dismiss" aria-label="Remove React">×</button>
+ *   </span>
+ * ============================================================ */
+
+/* ── Badge Base ────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 4px 10px;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ── Badge Color Variants ──────────────────────────────────── */
+/* Map to application status colors from the design system     */
+
+.badge--neutral {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+.badge--blue {
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+
+.badge--green {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+}
+
+.badge--orange {
+  background: var(--color-orange-50);
+  color: var(--color-orange-700);
+}
+
+.badge--red {
+  background: var(--color-red-50);
+  color: var(--color-red-700);
+}
+
+.badge--purple {
+  background: var(--color-purple-50);
+  color: var(--color-purple-700);
+}
+
+/* ── Badge Size Modifier ───────────────────────────────────── */
+
+.badge--sm {
+  font-size: var(--font-size-2xs);
+  padding: 2px 8px;
+}
+
+.badge--lg {
+  font-size: var(--font-size-sm);
+  padding: 6px 14px;
+}
+
+/* ── Dot Indicator ─────────────────────────────────────────── */
+/* Prepends a colored dot matching the badge variant color     */
+
+.badge--dot::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: var(--radius-circle);
+  background: currentColor;
+}
+
+/* ── Numeric / Count Badge ─────────────────────────────────── */
+/* A small circular badge used for notification counts         */
+
+.badge--count {
+  border-radius: var(--radius-circle);
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  font-size: var(--font-size-2xs);
+  justify-content: center;
+}
+
+/* ── Chip Base ─────────────────────────────────────────────── */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px var(--space-3);
+  background: var(--color-primary-100);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid transparent;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default);
+  white-space: nowrap;
+}
+
+/* ── Chip Color Variants ───────────────────────────────────── */
+
+.chip--blue {
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+.chip--green {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+}
+.chip--orange {
+  background: var(--color-orange-50);
+  color: var(--color-orange-700);
+}
+
+/* ── Chip Interactive ──────────────────────────────────────── */
+
+.chip--interactive {
+  cursor: pointer;
+}
+
+.chip--interactive:hover {
+  background: var(--color-primary-200);
+}
+
+.chip--interactive:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 2px;
+}
+
+/* ── Chip Dismiss Button ───────────────────────────────────── */
+
+.chip__dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-circle);
+  cursor: pointer;
+  color: var(--color-primary-400);
+  border: none;
+  background: transparent;
+  padding: 0;
+  flex-shrink: 0;
+  line-height: 1;
+  font-size: 14px;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+
+.chip__dismiss:hover {
+  background: var(--color-primary-200);
+  color: var(--color-text-primary);
+}
+
+.chip__dismiss:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 1px;
+}

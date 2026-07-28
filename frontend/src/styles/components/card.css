@@ -1,0 +1,97 @@
+/* ============================================================
+ * CARD COMPONENT
+ *
+ * Usage:
+ *   <div class="card">...</div>
+ *   <div class="card card--flat">...</div>
+ *   <button class="card card--interactive">...</button>
+ *
+ *   With sections:
+ *   <div class="card">
+ *     <div class="card__header"><h3>Title</h3></div>
+ *     <div class="card__body">Content</div>
+ *     <div class="card__footer">Actions</div>
+ *   </div>
+ * ============================================================ */
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+.card {
+  background: var(--color-surface-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-2);
+  overflow: hidden;
+}
+
+/* ── Variants ──────────────────────────────────────────────── */
+
+/* Flat — border instead of shadow (for lists, secondary content) */
+.card--flat {
+  box-shadow: none;
+  border: 1px solid var(--color-border);
+}
+
+/* Interactive — card that acts as a button or link */
+.card--interactive {
+  cursor: pointer;
+  transition:
+    box-shadow var(--duration-normal) var(--easing-default),
+    transform var(--duration-normal) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default);
+}
+
+.card--interactive:hover {
+  box-shadow: var(--elevation-3);
+  transform: translateY(-2px);
+}
+
+.card--interactive:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow: var(--elevation-1);
+}
+
+.card--interactive:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 2px;
+}
+
+/* Compact — tighter padding for dense UIs */
+.card--compact .card__header {
+  padding: var(--space-3) var(--space-4);
+}
+.card--compact .card__body {
+  padding: var(--space-4);
+}
+.card--compact .card__footer {
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ── Sections ──────────────────────────────────────────────── */
+
+.card__header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.card__header h2,
+.card__header h3 {
+  margin: 0;
+}
+
+.card__body {
+  padding: var(--space-6);
+}
+
+.card__footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

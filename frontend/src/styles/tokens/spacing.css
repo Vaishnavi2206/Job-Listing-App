@@ -1,0 +1,49 @@
+/* ============================================================
+ * SPACING TOKENS
+ * 4px base-unit scale. Every intentional spacing value in the app
+ * maps to a step (step × 4px). Semantic aliases consolidate the
+ * most frequently repeated patterns.
+ *
+ * Note: A few legacy values (14px for form gaps, 18px for some
+ * paddings, 26px for the details pane) fall off the 4px grid.
+ * These are preserved via semantic aliases to avoid layout changes
+ * and can be aligned to the grid in a future design iteration.
+ *
+ * Usage:  padding: var(--space-6);
+ *         gap: var(--space-form-gap);
+ * ============================================================ */
+
+:root {
+  /* ── Raw Scale (step × 4px) ───────────────────────────────── */
+  --space-0: 0px;
+  --space-1: 4px; /* tight inline icon gaps, micro offsets        */
+  --space-2: 8px; /* pill padding, badge gaps, small icon spacing  */
+  --space-3: 12px; /* form control padding, close-knit card gaps    */
+  --space-4: 16px; /* standard card padding, grid gaps              */
+  --space-5: 20px; /* grid gap, header element gap                  */
+  --space-6: 24px; /* card padding, section inner margin            */
+  --space-7: 28px; /* detail section vertical margin                */
+  --space-8: 32px; /* responsive reduced page padding               */
+  --space-9: 36px; /* dashboard section top margin                  */
+  --space-10: 40px; /* page padding (desktop)                        */
+  --space-12: 48px; /* larger section spacing                        */
+  --space-14: 56px; /* spacious hero/section gaps                    */
+  --space-15: 60px; /* hero section bottom margin                    */
+  --space-16: 64px; /* maximum layout spacing                        */
+
+  /* ── Semantic Aliases ─────────────────────────────────────── */
+  /* These names describe intent rather than raw pixel values.    */
+  --space-page-padding: var(--space-10); /* homePage, dashboardPage   */
+  --space-page-padding-sm: var(--space-6); /* responsive breakpoint     */
+  --space-card-padding: var(--space-6); /* dashboardCard, authCard   */
+  --space-card-padding-sm: var(--space-4); /* jobCard, applicationCard  */
+  --space-grid-gap: var(--space-5); /* dashboardGrid gap         */
+  --space-section-gap: var(--space-9); /* between dashboard sections*/
+
+  /* ── Off-Grid Legacy Values ───────────────────────────────── */
+  /* Preserved exactly to avoid layout changes. Target for future */
+  /* grid-alignment once a full visual redesign is planned.       */
+  --space-form-gap: 14px; /* gap between form fields in cards/panels */
+  --space-panel-pad: 18px; /* candidateListHeader, appliedJobsPanel   */
+  --space-details-pad: 26px; /* candidateJobDetails padding             */
+}

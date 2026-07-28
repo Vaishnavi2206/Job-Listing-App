@@ -1,0 +1,113 @@
+/* ============================================================
+ * EMPTY STATE & ERROR STATE COMPONENTS
+ *
+ * Usage — Empty state:
+ *   <div class="empty-state">
+ *     <div class="empty-state__icon">📭</div>
+ *     <h3 class="empty-state__title">No jobs found</h3>
+ *     <p class="empty-state__message">Try adjusting your search filters.</p>
+ *     <button class="btn btn--primary btn--md">Browse all jobs</button>
+ *   </div>
+ *
+ * Usage — Error state:
+ *   <div class="error-state">
+ *     <div class="error-state__icon">⚠</div>
+ *     <h3 class="error-state__title">Something went wrong</h3>
+ *     <p class="error-state__message">We could not load your data.</p>
+ *     <button class="btn btn--secondary btn--md">Retry</button>
+ *   </div>
+ * ============================================================ */
+
+/* ── Shared Layout ─────────────────────────────────────────── */
+
+.empty-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-10) var(--space-6);
+}
+
+/* ── Empty State ───────────────────────────────────────────── */
+
+.empty-state__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-circle);
+  background: var(--color-primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--color-primary-400);
+  flex-shrink: 0;
+}
+
+.empty-state__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-normal);
+  margin: 0;
+}
+
+.empty-state__message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  max-width: 300px;
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* ── Error State ───────────────────────────────────────────── */
+
+.error-state__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-circle);
+  background: var(--color-red-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--color-red-700);
+  flex-shrink: 0;
+}
+
+.error-state__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.error-state__message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  max-width: 300px;
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* ── Compact inline variant ────────────────────────────────── */
+
+.empty-state--compact,
+.error-state--compact {
+  padding: var(--space-6);
+  gap: var(--space-3);
+}
+
+.empty-state--compact .empty-state__icon,
+.error-state--compact .error-state__icon {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+}
+
+.empty-state--compact .empty-state__title,
+.error-state--compact .error-state__title {
+  font-size: var(--font-size-base);
+}

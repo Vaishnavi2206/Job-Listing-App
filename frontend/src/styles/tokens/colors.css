@@ -1,0 +1,76 @@
+/* ============================================================
+ * COLOR TOKENS
+ * Semantic, role-based color system derived from the application's
+ * existing palette. Every hardcoded hex value in the codebase maps
+ * to one of these tokens.
+ *
+ * Usage:  color: var(--color-text-primary);
+ *         background: var(--color-surface-card);
+ * ============================================================ */
+
+:root {
+  /* ── Brand / Primary (Neutral Gray Scale) ─────────────────── */
+  /* Used for: dark buttons, headings, sidebar, strong labels    */
+  --color-primary-900: #030712;
+  --color-primary-800: #111827; /* dark CTAs, strong headings          */
+  --color-primary-700: #1f2937; /* dark CTA hover state                */
+  --color-primary-600: #374151; /* body copy in detail panes           */
+  --color-primary-500: #4b5563; /* company name, muted sub-headings    */
+  --color-primary-400: #6b7280; /* secondary/caption text              */
+  --color-primary-300: #9ca3af; /* placeholder, tertiary               */
+  --color-primary-200: #d1d5db; /* light borders                       */
+  --color-primary-100: #f3f4f6; /* close-button background, pill bg    */
+  --color-primary-50: #f9fafb; /* alternate row/card background       */
+
+  /* ── Interactive / Blue ───────────────────────────────────── */
+  --color-blue-700: #1d4ed8; /* link text, "reviewed" status        */
+  --color-blue-600: #2563eb; /* active sidebar accent inset         */
+  --color-blue-50: #eef6ff; /* location meta pill background       */
+  --color-blue-25: #f3f8ff; /* active candidateJobItem background  */
+
+  /* ── Success / Green ──────────────────────────────────────── */
+  --color-green-700: #047857; /* salary, "hired" status, "applied"   */
+  --color-green-50: #ecfdf5; /* success pill / "Open" badge bg      */
+
+  /* ── Warning / Orange ─────────────────────────────────────── */
+  --color-orange-700: #c2410c; /* "pending" status, employment type   */
+  --color-orange-50: #fff7ed; /* warning pill background             */
+
+  /* ── Danger / Red ─────────────────────────────────────────── */
+  --color-red-700: #b91c1c; /* "rejected" status, error text       */
+  --color-red-50: #fef2f2; /* danger pill background              */
+
+  /* ── Info / Purple ────────────────────────────────────────── */
+  --color-purple-700: #6d28d9; /* "interview" status text             */
+  --color-purple-50: #f5f3ff; /* interview pill background           */
+
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --color-surface-page: #f5f7fb; /* global page background             */
+  --color-surface-card: #ffffff; /* card / panel / modal background    */
+  --color-surface-subtle: #f9fafb; /* alternate row bg, applied job item */
+
+  /* ── Borders ──────────────────────────────────────────────── */
+  --color-border: #e5e7eb; /* dividers, panel borders             */
+  --color-border-input: #dddddd; /* form input borders                  */
+
+  /* ── Semantic Text ────────────────────────────────────────── */
+  --color-text-primary: #111827; /* headings, labels, icon-on-white    */
+  --color-text-secondary: #6b7280; /* captions, meta info, subtext       */
+  --color-text-muted: #4b5563; /* body copy inside detail panes      */
+  --color-text-inverse: #ffffff; /* text on dark/primary backgrounds   */
+  --color-text-link: #1d4ed8; /* anchor links, resume URL           */
+  --color-text-success: #047857; /* success messages, applied badge    */
+  --color-text-error: #b91c1c; /* validation errors                  */
+  --color-text-warning: #c2410c; /* warning labels                     */
+
+  /* ── Semantic Actions ─────────────────────────────────────── */
+  --color-action-primary: #111827; /* primary button background    */
+  --color-action-primary-hover: #1f2937; /* primary button hover state   */
+  --color-action-disabled-bg: #e5e7eb; /* disabled / skeleton fill     */
+
+  /* ── Opacity ──────────────────────────────────────────────── */
+  /* Used in transitions, disabled states, and skeleton animations */
+  --opacity-disabled: 0.6; /* disabled inputs and buttons              */
+  --opacity-muted: 0.7; /* de-emphasized elements                   */
+  --opacity-subtle: 0.55; /* skeleton pulse animation lower bound     */
+}

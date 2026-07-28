@@ -1,0 +1,372 @@
+/* ============================================================
+ * FORM COMPONENTS
+ * Covers: Label, Input, Password Input, Select, Textarea,
+ *         Checkbox, Radio, FormField wrapper, Validation messages.
+ *
+ * Every form element shares the same visual sizing baseline so
+ * forms look consistent across the entire application.
+ * ============================================================ */
+
+/* ── Shared Input Base ─────────────────────────────────────── */
+/* Applied to .input, .select, .textarea                        */
+
+.input,
+.select,
+.textarea {
+  display: block;
+  width: 100%;
+  padding: 10px var(--space-3);
+  background: var(--color-surface-card);
+  border: 1.5px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  min-height: 42px;
+
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+
+  /* Remove browser outlines — we provide our own focus ring */
+  outline: none;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-primary-300);
+}
+
+/* Hover — subtle border darkening */
+.input:hover:not(:disabled):not(:focus):not(.input--error),
+.select:hover:not(:disabled):not(:focus):not(.select--error),
+.textarea:hover:not(:disabled):not(:focus):not(.textarea--error) {
+  border-color: var(--color-primary-300);
+}
+
+/* Focus ring */
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--color-blue-600);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-600) 15%, transparent);
+}
+
+/* Disabled */
+.input:disabled,
+.select:disabled,
+.textarea:disabled {
+  background: var(--color-primary-50);
+  color: var(--color-primary-300);
+  cursor: not-allowed;
+  border-color: var(--color-border-input);
+}
+
+/* Error state */
+.input--error,
+.select--error,
+.textarea--error {
+  border-color: var(--color-red-700);
+}
+
+.input--error:focus,
+.select--error:focus,
+.textarea--error:focus {
+  border-color: var(--color-red-700);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-red-700) 15%, transparent);
+}
+
+/* ── Select Specific ───────────────────────────────────────── */
+
+.select {
+  /* Remove native appearance — add custom chevron */
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: calc(var(--space-3) + 20px);
+  cursor: pointer;
+}
+
+.select option {
+  color: var(--color-text-primary);
+  background: var(--color-surface-card);
+}
+
+/* ── Textarea Specific ─────────────────────────────────────── */
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: var(--line-height-relaxed);
+}
+
+.textarea--sm {
+  min-height: 80px;
+}
+.textarea--lg {
+  min-height: 160px;
+}
+
+/* ── Input Size Modifiers ──────────────────────────────────── */
+
+.input--sm,
+.select--sm,
+.textarea--sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  min-height: 34px;
+}
+
+.input--lg,
+.select--lg {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  min-height: 50px;
+}
+
+/* ── Input with Icon Wrapper ───────────────────────────────── */
+/* Wrap an input and an icon: <div class="input-wrapper"> */
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper .input {
+  flex: 1;
+}
+
+.input-wrapper .input--has-icon-left {
+  padding-left: calc(var(--space-3) + 20px);
+}
+.input-wrapper .input--has-icon-right {
+  padding-right: calc(var(--space-3) + 20px);
+}
+
+.input-wrapper__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-400);
+  pointer-events: none;
+  width: 20px;
+}
+
+.input-wrapper__icon--left {
+  left: var(--space-3);
+}
+.input-wrapper__icon--right {
+  right: var(--space-3);
+}
+
+/* Make right icon clickable (e.g., reveal password) */
+.input-wrapper__icon--right.input-wrapper__icon--action {
+  pointer-events: auto;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-primary-400);
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.input-wrapper__icon--right.input-wrapper__icon--action:hover {
+  color: var(--color-text-primary);
+}
+
+/* Emoji / symbol used as an icon inside an input action button */
+.input-icon-emoji {
+  font-size: var(--font-size-xs);
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── Checkbox & Radio ──────────────────────────────────────── */
+
+.checkbox,
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.checkbox input[type="checkbox"],
+.radio input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  border: 1.5px solid var(--color-border-input);
+  background: var(--color-surface-card);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default);
+  outline: none;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* Shape */
+.checkbox input[type="checkbox"] {
+  border-radius: var(--radius-xs);
+}
+.radio input[type="radio"] {
+  border-radius: var(--radius-circle);
+}
+
+/* Checked state — checkbox tick via clip-path */
+.checkbox input[type="checkbox"]:checked {
+  background: var(--color-blue-600);
+  border-color: var(--color-blue-600);
+}
+
+.checkbox input[type="checkbox"]:checked::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* Radio dot */
+.radio input[type="radio"]:checked {
+  border-color: var(--color-blue-600);
+}
+
+.radio input[type="radio"]:checked::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-circle);
+  background: var(--color-blue-600);
+}
+
+/* Shared hover */
+.checkbox input[type="checkbox"]:hover:not(:checked):not(:disabled),
+.radio input[type="radio"]:hover:not(:checked):not(:disabled) {
+  border-color: var(--color-blue-600);
+}
+
+/* Shared focus */
+.checkbox input[type="checkbox"]:focus-visible,
+.radio input[type="radio"]:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-600) 20%, transparent);
+}
+
+/* Disabled */
+.checkbox input[type="checkbox"]:disabled,
+.radio input[type="radio"]:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.checkbox--disabled,
+.radio--disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Form Label ────────────────────────────────────────────── */
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+  line-height: var(--line-height-snug);
+}
+
+.form-label--required::after {
+  content: " *";
+  color: var(--color-text-error);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ── Form Field (wrapper) ──────────────────────────────────── */
+/* <div class="form-field">
+     <label class="form-label">...</label>
+     <input class="input" />
+     <p class="form-error">...</p>
+   </div>                                                       */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-field + .form-field {
+  margin-top: var(--space-1);
+}
+
+/* ── Validation Messages ───────────────────────────────────── */
+
+.form-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.form-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-error);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  line-height: var(--line-height-normal);
+}
+
+.form-error::before {
+  content: "⚠";
+  flex-shrink: 0;
+  font-size: 10px;
+  margin-top: 1px;
+}
+
+.form-success {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-success);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.form-success::before {
+  content: "✓";
+  flex-shrink: 0;
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Radio Group ───────────────────────────────────────────── */
+
+.radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.radio-group__legend {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  float: left;
+  width: 100%;
+}

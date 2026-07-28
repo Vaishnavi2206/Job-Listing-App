@@ -1,0 +1,20 @@
+/* ============================================================
+ * BORDER RADIUS TOKENS
+ * Nine steps covering every shape used in the application —
+ * from small skeleton rectangles up to pill badges and circles.
+ *
+ * Usage:  border-radius: var(--radius-md);
+ *         border-radius: var(--radius-full);
+ * ============================================================ */
+
+:root {
+  --radius-xs: 4px; /* future micro-elements, focus rings       */
+  --radius-sm: 6px; /* skeleton loading blocks                  */
+  --radius-base: 8px; /* skeleton detail block (JobDetailsSkeleton)*/
+  --radius-md: 10px; /* form inputs, buttons, small panels       */
+  --radius-lg: 14px; /* job cards, application cards, list panes */
+  --radius-xl: 18px; /* dashboard form cards                     */
+  --radius-2xl: 20px; /* auth card (login / signup)               */
+  --radius-full: 9999px; /* pill badges, status chips, meta pills    */
+  --radius-circle: 50%; /* icon-only circular buttons               */
+}

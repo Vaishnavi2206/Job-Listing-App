@@ -1,0 +1,84 @@
+/* ============================================================
+ * ANIMATION TOKENS
+ * Duration scale, easing functions, composite transition
+ * shorthand tokens, and all shared @keyframes definitions.
+ * Centralising keyframes here prevents duplicate animations
+ * across component CSS files.
+ *
+ * Usage:  transition: var(--transition-default);
+ *         animation: var(--animation-pulse);
+ * ============================================================ */
+
+:root {
+  /* ── Durations ────────────────────────────────────────────── */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms; /* primary interactive transitions         */
+  --duration-slow: 300ms;
+  --duration-xslow: 500ms;
+  --duration-pulse: 1.4s; /* skeleton loading pulse cycle            */
+
+  /* ── Easing Functions ─────────────────────────────────────── */
+  --easing-default: ease;
+  --easing-in: ease-in;
+  --easing-out: ease-out;
+  --easing-in-out: ease-in-out;
+  --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* bouncy enter   */
+
+  /* ── Composite Transition Shortcuts ───────────────────────── */
+  /* Reference these in component CSS instead of writing raw values. */
+  --transition-default: all var(--duration-normal) var(--easing-default);
+  --transition-colors:
+    color var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default);
+  --transition-transform: transform var(--duration-normal) var(--easing-default);
+  --transition-shadow: box-shadow var(--duration-normal) var(--easing-default);
+
+  /* ── Animation Shorthands ─────────────────────────────────── */
+  --animation-pulse: pulse var(--duration-pulse) var(--easing-in-out) infinite;
+}
+
+/* ── Shared @keyframes ────────────────────────────────────── */
+
+/* Spinner rotation — used by Spinner component and loading buttons */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeleton loading shimmer — used in JobCardSkeleton             */
+@keyframes pulse {
+  0% {
+    opacity: var(--opacity-subtle);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: var(--opacity-subtle);
+  }
+}
+
+/* Generic fade-in for newly appearing elements                   */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide-up entry for panels and modals                           */
+@keyframes slideUp {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

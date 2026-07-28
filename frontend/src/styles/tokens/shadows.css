@@ -1,0 +1,29 @@
+/* ============================================================
+ * SHADOW TOKENS
+ * Five elevation levels derived from every box-shadow value used
+ * in the application. Higher level = more visual elevation.
+ * Semantic elevation aliases map levels to component roles.
+ *
+ * Usage:  box-shadow: var(--shadow-lg);
+ *         box-shadow: var(--elevation-2);
+ * ============================================================ */
+
+:root {
+  /* ── Raw Shadow Tokens ────────────────────────────────────── */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05); /* flat inset elements         */
+  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.15); /* buttons, small lifted items */
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06); /* job cards, application cards*/
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08); /* auth card, dashboard cards  */
+  --shadow-xl: 0 14px 35px rgba(0, 0, 0, 0.1); /* panels, floating overlays   */
+
+  /* ── Special / Directional ────────────────────────────────── */
+  /* Active sidebar item — inset left-edge accent stripe         */
+  --shadow-inset-accent: inset 4px 0 0 var(--color-blue-600);
+
+  /* ── Semantic Elevation Aliases ───────────────────────────── */
+  /* elevation-0 = flat (no shadow — use --shadow-none)          */
+  --elevation-1: var(--shadow-md); /* job cards, application cards */
+  --elevation-2: var(--shadow-lg); /* dashboard cards, auth card   */
+  --elevation-3: var(--shadow-xl); /* floating panels, modals      */
+}

@@ -1,0 +1,91 @@
+/* ============================================================
+ * ALERT COMPONENT
+ *
+ * Usage:
+ *   <div class="alert alert--success" role="alert">
+ *     <span class="alert__icon">✓</span>
+ *     <div class="alert__body">
+ *       <p class="alert__title">Success</p>
+ *       <p class="alert__message">Your changes have been saved.</p>
+ *     </div>
+ *     <button class="alert__dismiss btn btn--ghost btn--icon btn--sm">×</button>
+ *   </div>
+ * ============================================================ */
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  border: 1px solid;
+  animation: fadeIn var(--duration-normal) var(--easing-out);
+}
+
+.alert__icon {
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.alert__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert__title {
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-1);
+  font-size: var(--font-size-sm);
+}
+
+.alert__message {
+  line-height: var(--line-height-relaxed);
+  opacity: 0.9;
+}
+
+.alert__dismiss {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ── Variants ──────────────────────────────────────────────── */
+
+.alert--success {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+  border-color: color-mix(in srgb, var(--color-green-700) 30%, transparent);
+}
+
+.alert--warning {
+  background: var(--color-orange-50);
+  color: var(--color-orange-700);
+  border-color: color-mix(in srgb, var(--color-orange-700) 30%, transparent);
+}
+
+.alert--danger {
+  background: var(--color-red-50);
+  color: var(--color-red-700);
+  border-color: color-mix(in srgb, var(--color-red-700) 30%, transparent);
+}
+
+.alert--info {
+  background: var(--color-blue-50);
+  color: var(--color-blue-700);
+  border-color: color-mix(in srgb, var(--color-blue-700) 30%, transparent);
+}
+
+/* ── Compact (single-line, no icon) ───────────────────────── */
+
+.alert--compact {
+  padding: var(--space-2) var(--space-3);
+  align-items: center;
+}
+
+.alert--compact .alert__title {
+  margin: 0;
+}

@@ -1,0 +1,112 @@
+/* ============================================================
+ * LOADER & SPINNER COMPONENTS
+ *
+ * Spinner — animated ring for loading states
+ * Loader  — centered full-area loading placeholder
+ *
+ * Usage:
+ *   <span class="spinner spinner--md spinner--dark" aria-hidden="true"></span>
+ *
+ *   <div class="loader" role="status" aria-label="Loading">
+ *     <span class="spinner spinner--lg spinner--blue"></span>
+ *     <p>Loading jobs...</p>
+ *   </div>
+ *
+ * Note: @keyframes spin is defined in tokens/animation.css
+ * ============================================================ */
+
+/* ── Spinner Ring ──────────────────────────────────────────── */
+
+.spinner {
+  display: inline-block;
+  border-style: solid;
+  border-radius: var(--radius-circle);
+  animation: spin var(--duration-slow) linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+
+.spinner--xs {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+}
+.spinner--sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+.spinner--md {
+  width: 24px;
+  height: 24px;
+  border-width: 2.5px;
+}
+.spinner--lg {
+  width: 36px;
+  height: 36px;
+  border-width: 3px;
+}
+.spinner--xl {
+  width: 48px;
+  height: 48px;
+  border-width: 3.5px;
+}
+
+/* ── Color Variants ────────────────────────────────────────── */
+/* The "track" (visible ring) uses a 15% alpha of the top color */
+
+.spinner--dark {
+  border-color: color-mix(in srgb, var(--color-action-primary) 15%, transparent);
+  border-top-color: var(--color-action-primary);
+}
+
+.spinner--light {
+  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+}
+
+.spinner--blue {
+  border-color: color-mix(in srgb, var(--color-blue-600) 15%, transparent);
+  border-top-color: var(--color-blue-600);
+}
+
+.spinner--muted {
+  border-color: var(--color-border);
+  border-top-color: var(--color-primary-400);
+}
+
+/* ── Full-area Loader ──────────────────────────────────────── */
+/* Centers a spinner + optional label in its container          */
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-10) var(--space-6);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+/* ── Inline Loader ─────────────────────────────────────────── */
+/* Spinner inline with text: "Saving  ○" */
+
+.loader--inline {
+  flex-direction: row;
+  padding: 0;
+  gap: var(--space-2);
+}
+
+/* ── Page-level Overlay Loader ─────────────────────────────── */
+
+.loader--overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-surface-page) 80%, transparent);
+  z-index: var(--z-overlay);
+  padding: 0;
+  animation: fadeIn var(--duration-normal) var(--easing-out);
+}

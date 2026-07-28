@@ -1,0 +1,50 @@
+/* ============================================================
+ * TYPOGRAPHY TOKENS
+ * One font family, an 11-step size scale covering every font-size
+ * used in the application, standardized weights, and line-height
+ * options matched to content type (headings vs. body vs. long-form).
+ *
+ * Usage:  font-size: var(--font-size-lg);
+ *         font-weight: var(--font-weight-bold);
+ * ============================================================ */
+
+:root {
+  /* ── Font Families ────────────────────────────────────────── */
+  --font-family-primary: Inter, system-ui, -apple-system, sans-serif;
+  --font-family-fallback: system-ui, -apple-system, sans-serif;
+
+  /* ── Font Size Scale ──────────────────────────────────────── */
+  /* Steps reflect every distinct font-size found in the codebase. */
+  --font-size-2xs: 11px; /* compact badges (badge--sm), count chips   */
+  --font-size-xs: 13px; /* status badges, small labels, badge counts */
+  --font-size-sm: 14px; /* secondary text, form hints, action labels  */
+  --font-size-base: 15px; /* card descriptions, list body copy          */
+  --font-size-md: 16px; /* default body / base browser size           */
+  --font-size-lg: 18px; /* card titles, section sub-headings          */
+  --font-size-xl: 20px; /* medium headings                            */
+  --font-size-2xl: 24px; /* card section headings                      */
+  --font-size-3xl: 32px; /* detail pane job title                      */
+  --font-size-4xl: 36px; /* responsive hero / dashboard headings       */
+  --font-size-5xl: 44px; /* dashboard hero heading (desktop)           */
+  --font-size-6xl: 52px; /* home page hero heading (desktop)           */
+
+  /* ── Font Weights ─────────────────────────────────────────── */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ── Line Heights ─────────────────────────────────────────── */
+  --line-height-tight: 1.25; /* headings, card titles                  */
+  --line-height-snug: 1.35; /* sub-headings, dashboard h2s            */
+  --line-height-normal: 1.4; /* body copy, truncated descriptions      */
+  --line-height-relaxed: 1.6; /* long-form job description content      */
+
+  /* ── Letter Spacing ──────────────────────────────────────── */
+  --letter-spacing-tight: -0.03em; /* hero h1 (52px+): tighten tracking  */
+  --letter-spacing-snug: -0.02em; /* h2 headings (24–44px)              */
+  --letter-spacing-tight-sm: -0.01em; /* logo wordmarks, UI product names   */
+  --letter-spacing-normal: 0em; /* body copy, default                 */
+  --letter-spacing-wide: 0.03em; /* small labels, form hints           */
+  --letter-spacing-wider: 0.08em; /* ALL CAPS eyebrow text              */
+}

@@ -1,0 +1,19 @@
+/* ============================================================
+ * Z-INDEX TOKENS
+ * Explicit layering hierarchy for every stacking context in the
+ * application. Using named tokens prevents "z-index wars" where
+ * developers guess large numbers to win the stack.
+ *
+ * Usage:  z-index: var(--z-modal);
+ * ============================================================ */
+
+:root {
+  --z-base: 0; /* normal document flow                           */
+  --z-raised: 10; /* sticky sidebar, cards lifted above the flow    */
+  --z-dropdown: 100; /* select menus, autocomplete result panels       */
+  --z-sticky: 200; /* sticky page headers, fixed navigation bars     */
+  --z-overlay: 300; /* semi-transparent backdrop overlays             */
+  --z-modal: 400; /* dialog windows and modal sheets                */
+  --z-toast: 500; /* notification toasts / snackbars                */
+  --z-tooltip: 600; /* tooltips — always highest in the stack         */
+}

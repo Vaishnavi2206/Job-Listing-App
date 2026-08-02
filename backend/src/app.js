@@ -9,6 +9,9 @@ const errorMiddleware = require("./middleware/error.middleware");
 const companyRoutes = require("./modules/companies/company.route");
 const jobRoutes = require("./modules/jobListings/jobListing.route");
 const applicationRoutes = require("./modules/applications/application.route");
+const postRoutes = require("./modules/posts/posts.route");
+const uploadRoutes = require("./modules/uploads/upload.route");
+
 const app = express();
 const cors = require("cors");
 
@@ -32,6 +35,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/uploads", uploadRoutes);
 
 app.use(errorMiddleware);
 

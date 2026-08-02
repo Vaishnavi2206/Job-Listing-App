@@ -6,6 +6,9 @@ const Company = require("../modules/companies/company.model");
 const JobListing = require("../modules/jobListings/jobListing.model");
 
 const Application = require("../modules/applications/application.model");
+const Post = require("../modules/posts/posts.model");
+const PostMedia = require("../modules/posts/postMedia.model");
+
 
 Role.hasMany(User, {
   foreignKey: "roleId",
@@ -59,10 +62,34 @@ Application.belongsTo(JobListing, {
   foreignKey: "jobListingId",
 });
 
+User.hasMany(Post, {
+  foreignKey: "authorId",
+});
+
+Post.belongsTo(User, {
+  foreignKey: "authorId",
+});
+
+/*
+  Post ↔ PostMedia  (one-to-many)
+*/
+
+Post.hasMany(PostMedia, {
+  foreignKey: "postId",
+  as: "media",
+  onDelete: "CASCADE",
+});
+
+PostMedia.belongsTo(Post, {
+  foreignKey: "postId",
+});
+
 module.exports = {
   User,
   Role,
   Company,
   JobListing,
   Application,
+  Post,
+  PostMedia,
 };

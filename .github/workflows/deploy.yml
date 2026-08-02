@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
 
           script: |
-            cd ~/apps/job-listing-app/Job-Listing-App
+            cd ~/apps/Job-Listing-App
 
             git pull origin main
 

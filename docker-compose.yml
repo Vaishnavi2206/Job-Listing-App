@@ -131,7 +131,7 @@ services:
 
     volumes:
       # Stores Let's Encrypt certificates
-      - letsencrypt:/etc/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt:ro
 
       # Used for ACME challenge
       - certbot-www:/var/www/certbot

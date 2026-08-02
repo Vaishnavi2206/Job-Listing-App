@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import JobCard from "./JobCard";
@@ -6,53 +6,78 @@ import { JobDetailsSkeleton } from "../skeletons/JobDetailsSkeleton";
 import { useJobs } from "../../hooks/useJobs";
 import { useDashboard } from "../../hooks/useDashboard";
 
-const VirtualizedJobList = () => {
+type VirtualizedListProps<T> = {
+  items: T[];
+  itemKey: (item: T, index: number) => string;
+  renderItem: (item: T, index: number) => ReactNode;
+  estimateSize?: number;
+  overscan?: number;
+  className?: string;
+  onEndReached?: () => void;
+  hasMore?: boolean;
+  isFetchingMore?: boolean;
+  endReachedThreshold?: number;
+  bottomLoader?: ReactNode;
+  emptyState?: ReactNode;
+  height?: string;
+};
+
+export const VirtualizedList = <T,>({
+  items,
+  itemKey,
+  renderItem,
+  estimateSize = 180,
+  overscan = 8,
+  className = "candidateListScroller",
+  onEndReached,
+  hasMore = false,
+  isFetchingMore = false,
+  endReachedThreshold = 5,
+  bottomLoader = null,
+  emptyState = null,
+  height = "100%",
+}: VirtualizedListProps<T>) => {
   "use no memo"; // useVirtualizer is incompatible with React Compiler memoization
-  const { jobs, selectedJob, setSelectedJob, isSearching, loadingMore, hasMore, loadMoreJobs } =
-    useJobs();
-  const { appliedJobIds } = useDashboard();
-  const parentRef = useRef(null);
+  const parentRef = useRef<HTMLDivElement | null>(null);
   const loadTriggeredRef = useRef(false);
 
   const rowVirtualizer = useVirtualizer({
-    count: jobs.length,
+    count: items.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 180,
-    overscan: 8,
+    estimateSize: () => estimateSize,
+    overscan,
   });
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
   useEffect(() => {
-    if (loadingMore || !hasMore) return;
-
+    if (!onEndReached || isFetchingMore || !hasMore) return;
     if (virtualItems.length === 0) return;
 
     const lastVisible = virtualItems[virtualItems.length - 1].index;
-
-    const shouldLoad = lastVisible >= jobs.length - 5;
+    const shouldLoad = lastVisible >= items.length - endReachedThreshold;
 
     if (shouldLoad && !loadTriggeredRef.current) {
       loadTriggeredRef.current = true;
-      loadMoreJobs();
+      onEndReached();
     }
 
     if (!shouldLoad) {
       loadTriggeredRef.current = false;
     }
-  }, [virtualItems, jobs.length, hasMore, loadingMore, loadMoreJobs]);
+  }, [endReachedThreshold, hasMore, isFetchingMore, items.length, onEndReached, virtualItems]);
 
-  if (isSearching) {
-    return <JobDetailsSkeleton />;
+  if (items.length === 0 && emptyState) {
+    return <>{emptyState}</>;
   }
 
   return (
     <div
       ref={parentRef}
-      className="candidateListScroller"
+      className={className}
       style={{
         overflowY: "auto",
-        height: "100%",
+        height,
       }}
     >
       <div
@@ -63,16 +88,13 @@ const VirtualizedJobList = () => {
         }}
       >
         {virtualItems.map((virtualRow) => {
-          const job = jobs[virtualRow.index];
+          const item = items[virtualRow.index];
 
-          if (!job) return null;
-
-          const isSelected = selectedJob?.id === job.id;
-          const isApplied = appliedJobIds.has(job.id);
+          if (!item) return null;
 
           return (
             <div
-              key={job.id}
+              key={itemKey(item, virtualRow.index)}
               ref={rowVirtualizer.measureElement}
               data-index={virtualRow.index}
               style={{
@@ -83,23 +105,50 @@ const VirtualizedJobList = () => {
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <JobCard
-                job={job}
-                isSelected={isSelected}
-                isApplied={isApplied}
-                setSelectedJob={setSelectedJob}
-              />
+              {renderItem(item, virtualRow.index)}
             </div>
           );
         })}
       </div>
 
-      {loadingMore && (
+      {isFetchingMore && bottomLoader}
+    </div>
+  );
+};
+
+const VirtualizedJobList = () => {
+  const { jobs, selectedJob, setSelectedJob, isSearching, loadingMore, hasMore, loadMoreJobs } =
+    useJobs();
+  const { appliedJobIds } = useDashboard();
+
+  if (isSearching) {
+    return <JobDetailsSkeleton />;
+  }
+
+  return (
+    <VirtualizedList
+      items={jobs}
+      itemKey={(job) => job.id}
+      renderItem={(job) => (
+        <JobCard
+          job={job}
+          isSelected={selectedJob?.id === job.id}
+          isApplied={appliedJobIds.has(job.id)}
+          setSelectedJob={setSelectedJob}
+        />
+      )}
+      estimateSize={180}
+      overscan={8}
+      endReachedThreshold={5}
+      hasMore={hasMore}
+      isFetchingMore={loadingMore}
+      onEndReached={loadMoreJobs}
+      bottomLoader={
         <div style={{ padding: "16px 0" }}>
           <JobDetailsSkeleton />
         </div>
-      )}
-    </div>
+      }
+    />
   );
 };
 

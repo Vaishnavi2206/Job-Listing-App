@@ -5,3 +5,11 @@ export type { Job, JobPayload, PaginatedJobsResponse } from "./types/job.types";
 export type { Application, ApplicationPayload } from "./types/application.types";
 export type { SignupPayload, LoginPayload } from "./types/auth.types";
 export type { JobFormData, ApplicationFormData } from "./types/form.types";
+export type {
+  Post,
+  PostMedia,
+  PostAuthor,
+  CreatePostPayload,
+  CreatePostMediaItem,
+  PaginatedPostsResponse,
+} from "./types/post.types";

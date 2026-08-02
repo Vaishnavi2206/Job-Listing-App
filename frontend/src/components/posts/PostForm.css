@@ -1,0 +1,490 @@
+/* ============================================================
+ * POST FORM
+ * A card-based compose form with a Tiptap rich-text editor.
+ * ============================================================ */
+
+/* ── Shell ─────────────────────────────────────────────────── */
+
+.post-form {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.post-form__heading {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.post-form__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ── Rich Text Editor wrapper ──────────────────────────────── */
+
+.post-editor {
+  border: 1.5px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-card);
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    box-shadow var(--duration-fast) var(--easing-default);
+  overflow: visible; /* allow emoji picker to overflow */
+}
+
+.post-editor:focus-within {
+  border-color: var(--color-blue-600);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-600) 15%, transparent);
+}
+
+/* Validation error state */
+.post-editor--error {
+  border-color: var(--color-red-700);
+}
+
+.post-editor--error:focus-within {
+  border-color: var(--color-red-700);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-red-700) 15%, transparent);
+}
+
+/* ── Toolbar ───────────────────────────────────────────────── */
+
+.post-editor__toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-surface-subtle);
+}
+
+.post-editor__tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--space-1);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+
+.post-editor__tool:hover {
+  background: var(--color-primary-100);
+  color: var(--color-text-primary);
+}
+
+.post-editor__tool.is-active {
+  background: var(--color-primary-800);
+  color: var(--color-text-inverse);
+}
+
+/* Text-label buttons (H1, H2, H3) */
+.post-editor__tool--label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family-primary);
+  letter-spacing: -0.01em;
+  min-width: 28px;
+}
+
+/* Disabled state (undo/redo when unavailable) */
+.post-editor__tool:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.post-editor__tool svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Filled icons (bold B, strikethrough S, lists) */
+.post-editor__tool svg.icon--filled {
+  fill: currentColor;
+  stroke: none;
+}
+
+.post-editor__divider {
+  width: 1px;
+  height: 18px;
+  background: var(--color-border);
+  margin: 0 var(--space-1);
+  flex-shrink: 0;
+}
+
+/* ── Emoji ─────────────────────────────────────────────────── */
+
+.post-editor__emoji-wrap {
+  position: relative;
+  margin-left: auto;
+}
+
+.post-editor__emoji-tool {
+  font-size: 16px;
+}
+
+.post-editor__emoji-picker {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: var(--z-dropdown);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-3);
+  overflow: hidden;
+}
+
+/* ── Editor content area ───────────────────────────────────── */
+
+.post-editor__content {
+  min-height: 140px;
+  padding: var(--space-3);
+  cursor: text;
+}
+
+/* Tiptap v3 renders a .tiptap div inside EditorContent */
+.post-editor__content .tiptap {
+  outline: none;
+  min-height: 120px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed, 1.6);
+}
+
+/* Placeholder */
+.post-editor__content .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--color-primary-300);
+  pointer-events: none;
+  height: 0;
+  float: left;
+}
+
+/* Tiptap-rendered prose */
+.post-editor__content .tiptap h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.post-editor__content .tiptap h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.post-editor__content .tiptap h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  margin: var(--space-2) 0 var(--space-2);
+}
+
+.post-editor__content .tiptap h1:first-child,
+.post-editor__content .tiptap h2:first-child,
+.post-editor__content .tiptap h3:first-child {
+  margin-top: 0;
+}
+
+.post-editor__content .tiptap ul,
+.post-editor__content .tiptap ol {
+  padding-left: var(--space-6);
+}
+
+.post-editor__content .tiptap blockquote {
+  border-left: 3px solid var(--color-primary-300);
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  background: var(--color-surface-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.post-editor__content .tiptap code {
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-xs);
+  padding: 1px 5px;
+  font-size: 0.9em;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  border: 1px solid var(--color-border);
+}
+
+.post-editor__content .tiptap pre {
+  background: var(--color-primary-800);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: var(--font-size-xs);
+  overflow-x: auto;
+  margin: var(--space-2) 0;
+}
+
+.post-editor__content .tiptap pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+}
+
+/* ── Media preview ─────────────────────────────────────────── */
+
+.post-form__media-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.post-form__media-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.post-form__media-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-100);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+}
+
+.post-form__media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--space-3);
+}
+
+.post-form__media-item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-primary-800);
+  flex-shrink: 0;
+}
+
+.post-form__media-item img,
+.post-form__media-video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration-normal) var(--easing-default);
+}
+
+.post-form__media-item:hover img,
+.post-form__media-item:hover .post-form__media-video-thumb {
+  transform: scale(1.04);
+}
+
+/* Overlay on hover */
+.post-form__media-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background var(--duration-fast) var(--easing-default);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.post-form__media-item:hover::after {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Video play icon overlay */
+.post-form__media-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.post-form__media-play svg {
+  width: 34px;
+  height: 34px;
+  fill: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+  transition: transform var(--duration-fast) var(--easing-default);
+}
+
+.post-form__media-item:hover .post-form__media-play svg {
+  transform: scale(1.1);
+}
+
+/* Video type badge */
+.post-form__media-type-badge {
+  position: absolute;
+  bottom: 7px;
+  left: 7px;
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Remove / close button — always visible */
+.post-form__media-remove {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-circle);
+  background: rgba(17, 24, 39, 0.72);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  backdrop-filter: blur(4px);
+  transition:
+    background-color var(--duration-fast) var(--easing-default),
+    transform var(--duration-fast) var(--easing-default);
+}
+
+.post-form__media-remove svg {
+  width: 10px;
+  height: 10px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.post-form__media-remove:hover {
+  background: rgba(185, 28, 28, 0.9);
+  transform: scale(1.12);
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+
+.post-form__footer {
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.post-form__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Custom attach-media button — looks like a tab action */
+.post-form__attach-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-card);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+}
+
+.post-form__attach-btn:hover {
+  border-color: var(--color-primary-400);
+  color: var(--color-text-primary);
+  background: var(--color-primary-50);
+}
+
+.post-form__attach-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.post-form__attach-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-800);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-full);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.post-form__file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Emoji picker click-outside backdrop ───────────────────── */
+
+.post-form__emoji-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-dropdown) - 1);
+}

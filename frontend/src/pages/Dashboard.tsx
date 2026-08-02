@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./Dashboard.css";
 import "../App.css";
 import EmployerDashboard from "../components/dashboard/EmployerDashboard";
@@ -8,10 +9,17 @@ import { JobsProvider } from "../context/JobsContext";
 import { useDashboard } from "../hooks/useDashboard";
 import useAuth from "../hooks/useAuth";
 import { Button, Alert, Loader } from "../components/ui";
+import PostForm from "../components/posts/PostForm";
+import PostFeed from "../components/posts/PostFeed";
+import type { Post } from "../types";
+
+type CandidateView = "browse-jobs" | "browse-posts" | "create-posts";
 
 const DashboardInner = () => {
   const { user } = useAuth();
   const isEmployer = user?.roleName === "EMPLOYER";
+  const [candidateView, setCandidateView] = useState<CandidateView>("browse-jobs");
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
   const {
     applications,
     showAppliedJobs,
@@ -19,10 +27,11 @@ const DashboardInner = () => {
     loading,
     message,
     error,
-    handleLogout,
+    handleLogout
   } = useDashboard();
 
   const initials = `${user?.firstName?.[0] ?? ""}${user?.lastName?.[0] ?? ""}`.toUpperCase();
+
 
   return (
     <div className="db-layout">
@@ -64,11 +73,36 @@ const DashboardInner = () => {
               </a>
             </>
           ) : (
-            <div className="db-nav__item db-nav__item--active">
-              <span className="db-nav__icon" aria-hidden="true">
-                ⊞
-              </span>
-              Browse Jobs
+            <div>
+              <a
+                className={`db-nav__item ${candidateView === "browse-jobs" ? "db-nav__item--active" : ""}`}
+                onClick={() => setCandidateView("browse-jobs")}
+              >
+                <span className="db-nav__icon" aria-hidden="true">
+                  ⊞
+                </span>
+                Browse Jobs
+              </a>
+
+              <a
+                className={`db-nav__item ${candidateView === "browse-posts" ? "db-nav__item--active" : ""}`}
+                onClick={() => setCandidateView("browse-posts")}
+              >
+                <span className="db-nav__icon" aria-hidden="true">
+                  ◉
+                </span>
+                Browse Posts
+              </a>
+
+              <a
+                className={`db-nav__item ${candidateView === "create-posts" ? "db-nav__item--active" : ""}`}
+                onClick={() => setCandidateView("create-posts")}
+              >
+                <span className="db-nav__icon" aria-hidden="true">
+                  ✎
+                </span>
+                Create Posts
+              </a>
             </div>
           )}
         </nav>
@@ -104,7 +138,7 @@ const DashboardInner = () => {
             </p>
           </div>
           <div className="db-topbar__right">
-            {!isEmployer && (
+            {!isEmployer && candidateView === "browse-jobs" && (
               <Button variant="secondary" size="sm" onClick={() => setShowAppliedJobs((v) => !v)}>
                 My Applications ({applications.length})
               </Button>
@@ -135,8 +169,12 @@ const DashboardInner = () => {
             </div>
           ) : isEmployer ? (
             <EmployerDashboard />
-          ) : (
+          ) : candidateView === "browse-jobs" ? (
             <CandidateDashboard />
+          ) : candidateView === "browse-posts" ? (
+            <PostFeed newPost={latestPost} />
+          ) : (
+            <PostForm onSuccess={setLatestPost} />
           )}
         </div>
       </main>

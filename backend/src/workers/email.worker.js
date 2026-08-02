@@ -32,7 +32,7 @@ const { Worker, QueueEvents } = require("bullmq");
 const { createRedisConnection } = require("../config/redis");
 const { sendStatusEmail } = require("../utils/email.service");
 const notificationLog = require("../repository/notificationLog.repository");
-require("dotenv").config();
+require("../config/env");
 
 const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || "application-status-emails";
 

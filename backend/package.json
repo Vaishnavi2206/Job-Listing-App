@@ -7,11 +7,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "start": "node src/server.js",
     "start:worker": "node src/worker-process.js",
-    "dev:worker": "nodemon src/worker-process.js",
-    "dashboard": "node src/dashboard/bull-board.js",
+    "dev:worker": "cross-env NODE_ENV=development nodemon src/worker-process.js",
+    "dashboard": "cross-env NODE_ENV=development node src/dashboard/bull-board.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:roles": "node database/seeders/role.seed.js",
     "lint": "eslint .",
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.5",
     "globals": "^15.15.0",
     "nodemon": "^3.1.14",

@@ -1,5 +1,5 @@
 // Load .env before any other require so env vars are set before module init
-require("dotenv").config({ path: require("path").resolve(__dirname, "../../.env") });
+require("./config/env");
 
 /**
  * Worker process entrypoint.

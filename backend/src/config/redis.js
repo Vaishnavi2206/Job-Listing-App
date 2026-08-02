@@ -23,7 +23,7 @@
  */
 
 const IORedis = require("ioredis");
-require("dotenv").config();
+require("./env");
 
 function buildRedisOptions() {
   return {

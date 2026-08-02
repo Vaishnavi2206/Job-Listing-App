@@ -10,7 +10,7 @@
 
 const { Queue } = require("bullmq");
 const { createRedisConnection } = require("../config/redis");
-require("dotenv").config();
+require("../config/env");
 
 const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || "application-status-emails";
 

@@ -134,7 +134,7 @@ const refreshSession = async (refreshToken) => {
 
   try {
     decoded = jwt.verify(refreshToken, getRefreshTokenSecret());
-  } catch (error) {
+  } catch {
     throw new UnauthorizedError("Invalid refresh token");
   }
 

@@ -41,6 +41,8 @@ export const VirtualizedList = <T,>({
   const parentRef = useRef<HTMLDivElement | null>(null);
   const loadTriggeredRef = useRef(false);
 
+  // TanStack Virtual exposes non-memoizable callbacks; this is an expected compiler limitation.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const rowVirtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => parentRef.current,

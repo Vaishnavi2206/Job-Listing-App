@@ -32,8 +32,9 @@ export type { FormFieldProps } from "./FormField";
 export { default as Card, CardHeader, CardBody, CardFooter } from "./Card";
 export type { CardProps, CardVariant } from "./Card";
 
-export { default as Badge, statusToBadgeVariant } from "./Badge";
+export { default as Badge } from "./Badge";
 export type { BadgeProps, BadgeVariant, BadgeSize } from "./Badge";
+export { statusToBadgeVariant } from "./badge.utils";
 
 export { default as Chip } from "./Chip";
 export type { ChipProps, ChipVariant } from "./Chip";

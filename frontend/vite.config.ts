@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 
@@ -8,6 +8,24 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  test: {
+  environment: "jsdom",
+  setupFiles: "./src/test/setup.ts",
+  globals: false,
+  clearMocks: true,
+
+  coverage: {
+    provider: "v8",
+    reporter: ["text", "html", "lcov"],
+
+    thresholds: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80,
+    },
+  },
+  },
   server: {
     proxy: {
       "/api": {

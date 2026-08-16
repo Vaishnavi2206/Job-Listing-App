@@ -15,21 +15,6 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
 }
 
-export function statusToBadgeVariant(status: string): BadgeVariant {
-  switch (status.toLowerCase()) {
-    case "active":
-      return "green";
-    case "inactive":
-      return "neutral";
-    case "pending":
-      return "orange";
-    case "rejected":
-      return "red";
-    default:
-      return "neutral";
-  }
-}
-
 // ── Badge ────────────────────────────────────────────────────
 
 export default function Badge({

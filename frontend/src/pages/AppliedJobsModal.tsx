@@ -1,17 +1,17 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDashboard } from "../hooks/useDashboard";
 import { useJobs } from "../hooks/useJobs";
 import { getApplicationJob } from "../utils/dashboard.utils";
 import { Badge } from "../components/ui";
-import { statusToBadgeVariant } from "../components/ui/Badge";
+import { statusToBadgeVariant } from "../components/ui/badge.utils";
 
 export default function AppliedJobsModal() {
   const { applications, setShowAppliedJobs } = useDashboard();
   const { jobs, setSelectedJob } = useJobs();
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setShowAppliedJobs(false);
-  };
+  }, [setShowAppliedJobs]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -19,7 +19,7 @@ export default function AppliedJobsModal() {
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  }, [handleClose]);
 
   return (
     <div className="db-modal-overlay" onClick={handleClose}>

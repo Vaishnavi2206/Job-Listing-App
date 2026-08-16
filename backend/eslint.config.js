@@ -3,7 +3,7 @@ const globals = require("globals");
 
 module.exports = [
   {
-    ignores: ["node_modules/**"],
+    ignores: ["node_modules/**", "coverage/**"],
   },
   {
     files: ["src/**/*.js", "database/**/*.js", "scripts/**/*.js"],
@@ -17,7 +17,7 @@ module.exports = [
       sourceType: "commonjs",
     },
     rules: {
-      "no-console": "warn",
+      "no-console": "off",
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       eqeqeq: ["error", "always"],
       "no-var": "error",

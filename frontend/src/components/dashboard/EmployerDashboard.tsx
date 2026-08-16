@@ -7,7 +7,7 @@ import {
   validApplicationTransitions,
 } from "../../utils/dashboard.utils";
 import { Button, Input, Select, Textarea, FormField, Badge, EmptyState } from "../ui";
-import { statusToBadgeVariant } from "../ui/Badge";
+import { statusToBadgeVariant } from "../ui/badge.utils";
 
 const EmployerDashboard = () => {
   const {

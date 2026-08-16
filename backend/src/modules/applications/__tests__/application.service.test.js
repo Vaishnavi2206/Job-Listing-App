@@ -10,7 +10,6 @@ jest.mock("../../../models", () => ({}));
 const Application = require("../application.model");
 const JobListing = require("../../jobListings/jobListing.model");
 const Company = require("../../companies/company.model");
-const User = require("../../users/user.model");
 const { enqueueStatusEmail } = require("../../../queues/email.queue");
 
 const {

@@ -1,7 +1,7 @@
 const { ZodError } = require("zod");
 const { AppError } = require("../shared/utils/errors");
 
-const errorMiddleware = (err, req, res, next) => {
+const errorMiddleware = (err, req, res, _next) => {
   // Zod validation errors → 422 with per-field detail
   if (err instanceof ZodError) {
     return res.status(422).json({

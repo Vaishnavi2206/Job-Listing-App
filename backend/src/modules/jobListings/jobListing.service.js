@@ -1,5 +1,5 @@
 const JobListing = require("./jobListing.model");
-const { Op, literal, where } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const Company = require("../companies/company.model");
 const sequelize = require("../../config/db");

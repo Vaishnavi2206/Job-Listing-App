@@ -14,25 +14,34 @@ require("../config/env");
 
 const QUEUE_NAME = process.env.EMAIL_QUEUE_NAME || "application-status-emails";
 
-// One dedicated connection for this Queue instance.
-const connection = createRedisConnection();
+let connection;
+let emailQueue;
 
-const emailQueue = new Queue(QUEUE_NAME, {
-  connection,
-  defaultJobOptions: {
-    attempts: Number(process.env.EMAIL_JOB_ATTEMPTS || 5),
-    backoff: {
-      type: "exponential",
-      delay: Number(process.env.EMAIL_JOB_BACKOFF_DELAY_MS || 5000),
-    },
-    // Auto-cleanup so Redis memory doesn't grow unbounded in prod.
-    // Keep a small trailing window of completed jobs for debugging,
-    // but keep ALL failed jobs (or a large cap) so nothing silently
-    // disappears before you've had a chance to inspect/retry it.
-    removeOnComplete: { count: 1000, age: 24 * 3600 }, // 1 day
-    removeOnFail: { count: 5000 }, // keep more failed jobs, they're rarer
-  },
-});
+function getEmailQueue() {
+  if (!emailQueue) {
+    // One dedicated connection for this Queue instance.
+    connection = createRedisConnection();
+
+    emailQueue = new Queue(QUEUE_NAME, {
+      connection,
+      defaultJobOptions: {
+        attempts: Number(process.env.EMAIL_JOB_ATTEMPTS || 5),
+        backoff: {
+          type: "exponential",
+          delay: Number(process.env.EMAIL_JOB_BACKOFF_DELAY_MS || 5000),
+        },
+        // Auto-cleanup so Redis memory doesn't grow unbounded in prod.
+        // Keep a small trailing window of completed jobs for debugging,
+        // but keep ALL failed jobs (or a large cap) so nothing silently
+        // disappears before you've had a chance to inspect/retry it.
+        removeOnComplete: { count: 1000, age: 24 * 3600 }, // 1 day
+        removeOnFail: { count: 5000 }, // keep more failed jobs, they're rarer
+      },
+    });
+  }
+
+  return emailQueue;
+}
 
 /**
  * Enqueue an email job for an application status change.
@@ -57,9 +66,10 @@ async function enqueueStatusEmail({
   applicantName,
   meta = {},
 }) {
+  const queue = getEmailQueue();
   const jobId = `status-email:${applicationId}:${status}`;
 
-  const job = await emailQueue.add(
+  const job = await queue.add(
     "send-status-email",
     {
       applicationId,
@@ -81,8 +91,23 @@ async function enqueueStatusEmail({
 }
 
 async function closeEmailQueue() {
-  await emailQueue.close();
-  await connection.quit();
+  if (emailQueue) {
+    await emailQueue.close();
+    emailQueue = undefined;
+  }
+
+  if (connection) {
+    await connection.quit();
+    connection = undefined;
+  }
 }
 
-module.exports = { emailQueue, enqueueStatusEmail, closeEmailQueue, QUEUE_NAME };
+module.exports = {
+  get emailQueue() {
+    return getEmailQueue();
+  },
+  getEmailQueue,
+  enqueueStatusEmail,
+  closeEmailQueue,
+  QUEUE_NAME,
+};

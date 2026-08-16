@@ -25,6 +25,10 @@
 const IORedis = require("ioredis");
 require("./env");
 
+function isTestEnv() {
+  return process.env.NODE_ENV === "test" || process.env.JEST_WORKER_ID !== undefined;
+}
+
 function buildRedisOptions() {
   return {
     host: process.env.REDIS_HOST || "127.0.0.1",
@@ -58,11 +62,15 @@ function createRedisConnection() {
   connection.on("error", (err) => {
     // Do not crash the process on transient Redis errors — ioredis will
     // keep retrying per retryStrategy above. Just log for visibility.
-    console.error("[redis] connection error:", err.message);
+    if (!isTestEnv()) {
+      console.error("[redis] connection error:", err.message);
+    }
   });
 
   connection.on("connect", () => {
-    console.log("[redis] connected");
+    if (!isTestEnv()) {
+      console.log("[redis] connected");
+    }
   });
 
   return connection;
